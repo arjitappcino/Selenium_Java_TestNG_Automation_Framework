@@ -88,9 +88,10 @@ public class ReviewRDIF extends BaseClass {
 
 		WebElement task = util.fetchTask(taskName, devTitle);
 		task.click();
-		Thread.sleep(2000);
 		util.takeSnapShot();
 		logger.log(LogStatus.PASS, "Clicked - "+taskName+" for title - "+devTitle);
+		
+		Thread.sleep(4000);
 
 		logger.log(LogStatus.PASS, "Task Page: Review and Accept RDIF");
 

@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="Review RDIF(failed)">
+  <test thread-count="5" name="RDIF Creation(failed)">
     <classes>
-      <class name="tests.ReviewRDIF">
+      <class name="tests.RDIFCreation">
         <methods>
-          <include name="endTest"/>
           <include name="beforeSuite"/>
-          <include name="beforeTest"/>
+          <include name="createProjectRDIF"/>
           <include name="setUp"/>
-          <include name="taskReviewRDIF"/>
+          <include name="beforeTest"/>
           <include name="afterSuitre"/>
+          <include name="endTest"/>
         </methods>
-      </class> <!-- tests.ReviewRDIF -->
+      </class> <!-- tests.RDIFCreation -->
     </classes>
-  </test> <!-- Review RDIF(failed) -->
+  </test> <!-- RDIF Creation(failed) -->
 </suite> <!-- Failed suite [Suite] -->

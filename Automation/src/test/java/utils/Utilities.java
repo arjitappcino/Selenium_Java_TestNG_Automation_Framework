@@ -15,7 +15,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Utilities {
+import tests.BaseClass;
+
+public class Utilities{
 
 	WebDriver driver;
 
@@ -27,7 +29,10 @@ public class Utilities {
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
-		String filePath = ".\\screenshots";
+		String filePath = ".\\screenshots\\"+BaseClass.projectName;
+		
+		System.out.println(filePath);
+
 
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);

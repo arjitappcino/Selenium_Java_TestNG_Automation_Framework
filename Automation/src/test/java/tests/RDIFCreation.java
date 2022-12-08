@@ -3,7 +3,6 @@ package tests;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -54,7 +53,6 @@ public class RDIFCreation extends BaseClass {
 	Random random = new Random();
 	int x = random.nextInt(10000);
 	String id = String.valueOf(x);
-	Properties properties;
 	RandomDataInput randomInput;
 	Actions action;
 	Logger log;
@@ -97,7 +95,8 @@ public class RDIFCreation extends BaseClass {
 	@Test
 	public void createProjectRDIF() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Create RDIF Project");
+		devTitle = getProjectName();
+		logger = extent.startTest("Create RDIF Project: "+devTitle);
 
 		// Login Proponent
 		driver.get(properties.getProperty("url_proponent"));
@@ -114,7 +113,6 @@ public class RDIFCreation extends BaseClass {
 
 		objRDIF.selectRegion(randomInput.getRandomRegion());
 		objRDIF.selectSector(randomInput.getRandomSector());
-		devTitle = "NEOM ATMN ID " + id;
 		objRDIF.setDevTitle(devTitle);
 		objRDIF.addPropKeyContactDetails("p1", "p1@abc.com");
 		objRDIF.addSusDevContactDetails("s1", "s1@abc.com");
@@ -175,11 +173,6 @@ public class RDIFCreation extends BaseClass {
 		objSuccessPage.validateRDIFCreationCompleted(devTitle);
 
 		logger.log(LogStatus.PASS, "RDIF Submitted = " + devTitle);
-
-		FileOutputStream out = new FileOutputStream(util.getPropertyFileLocation());
-		properties.setProperty("currentProject", devTitle);
-		properties.store(out, null);
-		out.close();
 
 	}
 

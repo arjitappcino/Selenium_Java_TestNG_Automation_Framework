@@ -4,7 +4,11 @@ import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Properties;
+import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.PropertyConfigurator;
@@ -20,17 +24,43 @@ import org.testng.annotations.BeforeTest;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 
+import utils.Utilities;
+
 public class BaseClass {
 	WebDriver driver;
 	ExtentTest logger;
 	File screenshotFolder = new File(".\\screenshots");
 	static ExtentReports extent;
+	static Random random = new Random();
+	static int x = random.nextInt(10000);
+	static String id = String.valueOf(x);
+	public static String projectName = "NEOM ATMN ID " + id;;
+	Utilities util = new Utilities(driver);
+	Properties properties;
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
 		FileUtils.cleanDirectory(screenshotFolder);
-		//Utilities.newReportHTML();
-		extent = new ExtentReports(".\\screenshots\\report.html",true);
+		String screenshotPath = ".\\screenshots\\"+projectName;
+		File theDir = new File(screenshotPath);
+		if (!theDir.exists()){
+		    theDir.mkdirs();
+		}
+		
+		FileInputStream in = new FileInputStream(util.getPropertyFileLocation());
+		properties = new Properties();
+		properties.load(in);
+		in.close();
+		
+		FileOutputStream out = new FileOutputStream(util.getPropertyFileLocation());
+		properties.setProperty("currentProject", projectName);
+		properties.store(out, null);
+		out.close();
+		
+		
+		String path = ".\\screenshots\\"+projectName+"\\report.html";
+		System.out.println(path);
+		extent = new ExtentReports(path,true);
 		extent.loadConfig(new File(".\\extent-config.xml"));
 		DOMConfigurator.configure("log4j.xml");
 		PropertyConfigurator.configure(".\\logs\\generatedLogs.log");
@@ -67,8 +97,13 @@ public class BaseClass {
 		return extent;
 	}
 	
+	public String getProjectName() {
+		return projectName;
+	}
+	
 	@AfterSuite
 	public void afterSuitre() {
 		extent.flush();
 	}
+
 }

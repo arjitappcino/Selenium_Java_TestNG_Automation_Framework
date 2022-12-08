@@ -7,7 +7,7 @@
 		</classes>
 	</test>
 
-	<test name="SRF">
+	<!--<test name="SRF">
 		<classes>
 			<class name="tests.SurveyRequestForm" />
 		</classes>
@@ -17,5 +17,5 @@
 		<classes>
 			<class name="tests.ReviewRDIF" />
 		</classes>
-	</test>
+	</test>-->
 </suite> 
