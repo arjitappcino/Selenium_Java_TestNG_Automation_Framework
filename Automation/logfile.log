@@ -1266,3 +1266,154 @@
 2022-12-08 10:01:32,776 INFO  [HomePageElements] Clicked Submit Button 
 2022-12-08 10:01:39,553 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
 2022-12-08 10:01:39,553 INFO  [LoginPageElements] Success Sub heading Message shown = Survey Request Form for  
+2022-12-08 10:48:25,219 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 10:48:25,315 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 10:48:29,359 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 10:49:54,692 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 10:49:54,797 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 10:49:58,533 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 10:51:21,939 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 10:51:22,037 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 10:51:28,320 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 10:58:00,982 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 10:58:01,075 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 10:58:05,251 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 10:58:20,969 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 10:59:44,482 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 10:59:44,585 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 10:59:48,915 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:02:50,155 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 11:02:50,258 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:02:54,988 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:03:16,255 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 11:03:23,424 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:03:23,424 INFO  [LoginPageElements] Success Sub heading Message shown = Review RDIF Form for  
+2022-12-08 11:15:44,500 INFO  [LoginPageElements] username set to Proponent_user 
+2022-12-08 11:15:44,758 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:15:49,671 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:15:57,514 INFO  [HomePageElements] Create Project Button Clicked 
+2022-12-08 11:16:01,290 INFO  [CreateRDIFPageElements] region selected = LOTL 
+2022-12-08 11:16:01,719 INFO  [CreateRDIFPageElements] sector selected = Water 
+2022-12-08 11:16:02,349 INFO  [CreateRDIFPageElements] Development Title = NEOM ATMN ID 2172 
+2022-12-08 11:16:03,106 INFO  [CreateRDIFPageElements] Proponent Key Contact(s) = p1, p1@abc.com 
+2022-12-08 11:16:06,290 INFO  [CreateRDIFPageElements] Sustainability Development Team Key Contact(s) = s1, s1@abc.com 
+2022-12-08 11:16:07,347 INFO  [CreateRDIFPageElements] Scope Definition Entered 
+2022-12-08 11:16:20,407 INFO  [CreateRDIFPageElements] Filled paragraph Quantity fields 
+2022-12-08 11:16:23,737 INFO  [CreateRDIFPageElements] Start date for stage[1]= 12/10/2022 
+2022-12-08 11:25:57,717 INFO  [LoginPageElements] username set to Proponent_user 
+2022-12-08 11:25:57,887 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:26:02,398 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:26:08,441 INFO  [HomePageElements] Create Project Button Clicked 
+2022-12-08 11:26:12,197 INFO  [CreateRDIFPageElements] region selected = Mobility 
+2022-12-08 11:26:12,647 INFO  [CreateRDIFPageElements] sector selected = Energy 
+2022-12-08 11:26:13,482 INFO  [CreateRDIFPageElements] Development Title = NEOM ATMN ID 4068 
+2022-12-08 11:26:14,223 INFO  [CreateRDIFPageElements] Proponent Key Contact(s) = p1, p1@abc.com 
+2022-12-08 11:26:14,941 INFO  [CreateRDIFPageElements] Sustainability Development Team Key Contact(s) = s1, s1@abc.com 
+2022-12-08 11:26:15,411 INFO  [CreateRDIFPageElements] Scope Definition Entered 
+2022-12-08 11:26:23,739 INFO  [CreateRDIFPageElements] Filled paragraph Quantity fields 
+2022-12-08 11:26:26,851 INFO  [CreateRDIFPageElements] Start date for stage[1]= 12/10/2022 
+2022-12-08 11:26:27,536 INFO  [CreateRDIFPageElements] End date for stage[1]= 12/12/2022 
+2022-12-08 11:26:28,253 INFO  [CreateRDIFPageElements] Start date for stage[2]= 12/14/2022 
+2022-12-08 11:26:28,992 INFO  [CreateRDIFPageElements] End date for stage[2]= 12/16/2022 
+2022-12-08 11:26:29,618 INFO  [CreateRDIFPageElements] Start date for stage[3]= 12/18/2022 
+2022-12-08 11:26:30,360 INFO  [CreateRDIFPageElements] End date for stage[3]= 12/20/2022 
+2022-12-08 11:26:30,972 INFO  [CreateRDIFPageElements] Start date for stage[4]= 12/22/2022 
+2022-12-08 11:26:31,530 INFO  [CreateRDIFPageElements] End date for stage[4]= 12/24/2022 
+2022-12-08 11:26:32,118 INFO  [CreateRDIFPageElements] Start date for stage[5]= 12/26/2022 
+2022-12-08 11:26:32,775 INFO  [CreateRDIFPageElements] End date for stage[5]= 12/28/2022 
+2022-12-08 11:26:33,211 INFO  [CreateRDIFPageElements] Related Development Filled. 
+2022-12-08 11:26:33,633 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:26:37,409 INFO  [CreateRDIFPageElements] Strategic and Planning Context Filled. 
+2022-12-08 11:26:37,550 INFO  [CreateRDIFPageElements] Selected Project Type = Master Project 
+2022-12-08 11:26:43,455 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:27:04,292 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:27:04,292 INFO  [LoginPageElements] Success Sub heading Message shown =  has been added into the System.! 
+2022-12-08 11:30:32,395 INFO  [LoginPageElements] username set to Proponent_user 
+2022-12-08 11:30:32,492 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:30:36,288 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:30:41,360 INFO  [HomePageElements] Create Project Button Clicked 
+2022-12-08 11:30:43,993 INFO  [CreateRDIFPageElements] region selected = The Line 
+2022-12-08 11:30:44,287 INFO  [CreateRDIFPageElements] sector selected = Environment 
+2022-12-08 11:30:44,736 INFO  [CreateRDIFPageElements] Development Title = NEOM ATMN ID 998 
+2022-12-08 11:30:45,441 INFO  [CreateRDIFPageElements] Proponent Key Contact(s) = p1, p1@abc.com 
+2022-12-08 11:30:46,111 INFO  [CreateRDIFPageElements] Sustainability Development Team Key Contact(s) = s1, s1@abc.com 
+2022-12-08 11:30:46,594 INFO  [CreateRDIFPageElements] Scope Definition Entered 
+2022-12-08 11:30:55,118 INFO  [CreateRDIFPageElements] Filled paragraph Quantity fields 
+2022-12-08 11:30:58,017 INFO  [CreateRDIFPageElements] Start date for stage[1]= 12/10/2022 
+2022-12-08 11:30:58,461 INFO  [CreateRDIFPageElements] End date for stage[1]= 12/12/2022 
+2022-12-08 11:30:58,933 INFO  [CreateRDIFPageElements] Start date for stage[2]= 12/14/2022 
+2022-12-08 11:30:59,492 INFO  [CreateRDIFPageElements] End date for stage[2]= 12/16/2022 
+2022-12-08 11:31:00,152 INFO  [CreateRDIFPageElements] Start date for stage[3]= 12/18/2022 
+2022-12-08 11:31:00,775 INFO  [CreateRDIFPageElements] End date for stage[3]= 12/20/2022 
+2022-12-08 11:31:01,348 INFO  [CreateRDIFPageElements] Start date for stage[4]= 12/22/2022 
+2022-12-08 11:31:01,905 INFO  [CreateRDIFPageElements] End date for stage[4]= 12/24/2022 
+2022-12-08 11:31:02,432 INFO  [CreateRDIFPageElements] Start date for stage[5]= 12/26/2022 
+2022-12-08 11:31:02,952 INFO  [CreateRDIFPageElements] End date for stage[5]= 12/28/2022 
+2022-12-08 11:31:03,404 INFO  [CreateRDIFPageElements] Related Development Filled. 
+2022-12-08 11:31:03,926 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:31:07,731 INFO  [CreateRDIFPageElements] Strategic and Planning Context Filled. 
+2022-12-08 11:31:07,946 INFO  [CreateRDIFPageElements] Selected Project Type = Asset 
+2022-12-08 11:31:10,397 INFO  [CreateRDIFPageElements] Typology selected = Iconic/Signature Asset 
+2022-12-08 11:31:10,831 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:31:30,589 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:31:30,589 INFO  [LoginPageElements] Success Sub heading Message shown =  has been added into the System.! 
+2022-12-08 11:31:34,424 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 11:31:34,542 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:31:38,499 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:31:51,447 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 11:31:54,869 INFO  [HomePageElements] department selected = Security 
+2022-12-08 11:31:55,341 INFO  [HomePageElements] Clicked Next Button 
+2022-12-08 11:31:57,492 INFO  [HomePageElements] Selected terrestial scope 
+2022-12-08 11:32:00,844 INFO  [HomePageElements] Clicked Submit Button 
+2022-12-08 11:32:03,379 INFO  [HomePageElements] Clicked Submit Button 
+2022-12-08 11:32:09,857 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:32:09,857 INFO  [LoginPageElements] Success Sub heading Message shown = Survey Request Form for  
+2022-12-08 11:32:13,853 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 11:32:13,962 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:32:18,989 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:33:35,956 INFO  [LoginPageElements] username set to Proponent_user 
+2022-12-08 11:33:36,093 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:33:40,291 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:33:45,712 INFO  [HomePageElements] Create Project Button Clicked 
+2022-12-08 11:33:48,488 INFO  [CreateRDIFPageElements] region selected = Archipelago 
+2022-12-08 11:33:49,031 INFO  [CreateRDIFPageElements] sector selected = Food 
+2022-12-08 11:33:49,610 INFO  [CreateRDIFPageElements] Development Title = NEOM ATMN ID 2471 
+2022-12-08 11:33:50,330 INFO  [CreateRDIFPageElements] Proponent Key Contact(s) = p1, p1@abc.com 
+2022-12-08 11:33:50,895 INFO  [CreateRDIFPageElements] Sustainability Development Team Key Contact(s) = s1, s1@abc.com 
+2022-12-08 11:33:51,356 INFO  [CreateRDIFPageElements] Scope Definition Entered 
+2022-12-08 11:33:59,716 INFO  [CreateRDIFPageElements] Filled paragraph Quantity fields 
+2022-12-08 11:34:03,178 INFO  [CreateRDIFPageElements] Start date for stage[1]= 12/10/2022 
+2022-12-08 11:34:03,804 INFO  [CreateRDIFPageElements] End date for stage[1]= 12/12/2022 
+2022-12-08 11:34:04,479 INFO  [CreateRDIFPageElements] Start date for stage[2]= 12/14/2022 
+2022-12-08 11:34:05,006 INFO  [CreateRDIFPageElements] End date for stage[2]= 12/16/2022 
+2022-12-08 11:34:05,552 INFO  [CreateRDIFPageElements] Start date for stage[3]= 12/18/2022 
+2022-12-08 11:34:06,164 INFO  [CreateRDIFPageElements] End date for stage[3]= 12/20/2022 
+2022-12-08 11:34:06,740 INFO  [CreateRDIFPageElements] Start date for stage[4]= 12/22/2022 
+2022-12-08 11:34:07,193 INFO  [CreateRDIFPageElements] End date for stage[4]= 12/24/2022 
+2022-12-08 11:34:07,827 INFO  [CreateRDIFPageElements] Start date for stage[5]= 12/26/2022 
+2022-12-08 11:34:08,563 INFO  [CreateRDIFPageElements] End date for stage[5]= 12/28/2022 
+2022-12-08 11:34:09,011 INFO  [CreateRDIFPageElements] Related Development Filled. 
+2022-12-08 11:34:09,349 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:34:13,060 INFO  [CreateRDIFPageElements] Strategic and Planning Context Filled. 
+2022-12-08 11:34:13,242 INFO  [CreateRDIFPageElements] Selected Project Type = Master Project 
+2022-12-08 11:34:17,596 INFO  [CreateRDIFPageElements] Next Button clicked 
+2022-12-08 11:34:38,182 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:34:38,182 INFO  [LoginPageElements] Success Sub heading Message shown =  has been added into the System.! 
+2022-12-08 11:34:42,411 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 11:34:42,508 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:34:47,331 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:34:58,562 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 11:35:01,854 INFO  [HomePageElements] department selected = Agriculture 
+2022-12-08 11:35:02,361 INFO  [HomePageElements] Clicked Next Button 
+2022-12-08 11:35:04,533 INFO  [HomePageElements] Selected terrestial scope 
+2022-12-08 11:35:07,551 INFO  [HomePageElements] Clicked Submit Button 
+2022-12-08 11:35:10,245 INFO  [HomePageElements] Clicked Submit Button 
+2022-12-08 11:35:16,782 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:35:16,782 INFO  [LoginPageElements] Success Sub heading Message shown = Survey Request Form for  
+2022-12-08 11:35:20,127 INFO  [LoginPageElements] username set to Assessment_representative 
+2022-12-08 11:35:20,211 INFO  [LoginPageElements] password set to appian@123 
+2022-12-08 11:35:24,155 INFO  [LoginPageElements] Signin button clicked 
+2022-12-08 11:35:40,149 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 11:35:47,282 INFO  [HomePageElements] Clicked Accept Button 
+2022-12-08 11:35:53,925 INFO  [LoginPageElements] Success heading Message shown = Thank You ! 
+2022-12-08 11:35:53,925 INFO  [LoginPageElements] Success Sub heading Message shown = Review RDIF Form for  

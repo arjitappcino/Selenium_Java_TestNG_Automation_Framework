@@ -27,7 +27,7 @@ public class Utilities {
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
-		String filePath = "C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots";
+		String filePath = ".\\screenshots";
 
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);

@@ -33,6 +33,16 @@ public class TaskPageElements {
 	
 	@FindBy(xpath = "//button[text()='Yes']")
 	WebElement yesBtn;
+	
+	@FindBy(xpath = "//span[text()='COMMENTS']/ancestor::div[7]/following-sibling::div//textarea")
+	WebElement commentField;
+	
+	@FindBy(xpath="//input[@placeholder='Search RDP TASK MGMT Task Details For Assignees']")
+	WebElement searchTextField;
+	
+	
+	@FindBy(xpath="//button[text()='Search']")
+	WebElement searchBtn;
 
 	public TaskPageElements(WebDriver driver){
 		this.driver = driver;
@@ -89,6 +99,18 @@ public class TaskPageElements {
 	
 	public void clickYesBtn() {
 		yesBtn.click();
+	}
+	
+	public void setComment(String strComment) {
+		commentField.sendKeys(strComment);
+	}
+	
+	public void setSearch(String strSearch) {
+		searchTextField.sendKeys(strSearch);
+	}
+	
+	public void clickSearch() {
+		searchBtn.click();
 	}
 	
 //	public void cancelBtn() {

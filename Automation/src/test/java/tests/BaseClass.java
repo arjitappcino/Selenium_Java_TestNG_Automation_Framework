@@ -20,22 +20,20 @@ import org.testng.annotations.BeforeTest;
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 
-import utils.Utilities;
-
 public class BaseClass {
 	WebDriver driver;
 	ExtentTest logger;
-	File screenshotFolder = new File("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots");
+	File screenshotFolder = new File(".\\screenshots");
 	static ExtentReports extent;
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
 		FileUtils.cleanDirectory(screenshotFolder);
-		Utilities.newReportHTML();
-		extent = new ExtentReports("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots\\report.html",true);
-		extent.loadConfig(new File("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\extent-config.xml"));
+		//Utilities.newReportHTML();
+		extent = new ExtentReports(".\\screenshots\\report.html",true);
+		extent.loadConfig(new File(".\\extent-config.xml"));
 		DOMConfigurator.configure("log4j.xml");
-		PropertyConfigurator.configure("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\logs\\generatedLogs.log");
+		PropertyConfigurator.configure(".\\logs\\generatedLogs.log");
 	}
 	
 	@BeforeTest

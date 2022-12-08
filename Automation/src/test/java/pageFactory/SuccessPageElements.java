@@ -67,4 +67,23 @@ public class SuccessPageElements {
 		log.info("Success heading Message shown = " + heading);
 		log.info("Success Sub heading Message shown = " + subHeading);
 	}
+	
+	public void validateReviewRDIFTaskCompleted(String strProjectName) {
+		WebElement successHeading = driver.findElement(By.xpath("//strong[contains(text(),'Thank You')]"));
+		Assert.assertEquals(true, successHeading.isDisplayed());
+		String heading = successHeading.getText();
+		Assert.assertEquals(true, heading.contains("Thank You"));
+		
+		WebElement successSubHeading = driver.findElement(By.xpath("//span[contains(text(),'Review RDIF')]"));
+		Assert.assertEquals(true, successSubHeading.isDisplayed());
+		String subHeading = successSubHeading.getText();
+		Assert.assertEquals(true, subHeading.contains("Review RDIF Form"));
+		
+		WebElement projectNameDisplay = driver.findElement(By.xpath("//span[contains(text(),'"+strProjectName+"')]"));
+		Assert.assertEquals(true, projectNameDisplay.isDisplayed());
+		
+		log.info("Success heading Message shown = " + heading);
+		log.info("Success Sub heading Message shown = " + subHeading);
+	}
+	
 }

@@ -82,6 +82,9 @@ public class CreateRDIFPageElements {
 
 	@FindBy(xpath = "//label[text()='Related Developments']/parent::div//following-sibling::div//textarea")
 	WebElement relatedDevField;
+	
+	@FindBy(xpath="//span[text()='Insert Figure']/parent::div/following-sibling::div//input")
+	WebElement insertFigure;
 
 	// page 2 elements
 
@@ -119,6 +122,12 @@ public class CreateRDIFPageElements {
 	
 	@FindBy(xpath = "//button[text()='Submit']")
 	WebElement submitBtn;
+	
+	@FindBy(xpath="//span[text()='Upload']/parent::div/following-sibling::div//input")
+	WebElement uploadField;
+	
+	@FindBys({ @FindBy(xpath = "//textarea") })
+	public List<WebElement> textAreaFieldsRemaining;
 	
 
 	public CreateRDIFPageElements(WebDriver driver) {
@@ -162,9 +171,15 @@ public class CreateRDIFPageElements {
 		log.info("Sustainability Development Team Key Contact(s) = "+strName+", "+strEmail);
 	}
 
-	public void setScopeDefinition(String strScope) {
+	public void setScopeDefinition(String strScope) throws Exception {
 		scopeDefinitionField.sendKeys(strScope);
 		log.info("Scope Definition Entered");
+		util.takeSnapShot();
+		
+		WebElement element = driver.findElement(By.xpath("//label[text()='Scope Definition']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+
 	}
 
 	public void setParagraphQuantityFields(String strLorem) throws InterruptedException {
@@ -215,6 +230,10 @@ public class CreateRDIFPageElements {
 	public void setRelatedDevelopment(String strRelatedDev) {
 		relatedDevField.sendKeys(strRelatedDev);
 		log.info("Related Development Filled.");
+	}
+	
+	public void setInsertFigure() {
+		insertFigure.sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\user.xlsx");
 	}
 
 	// page 2 methods
@@ -310,6 +329,16 @@ public class CreateRDIFPageElements {
 		Thread.sleep(2000);
 		
 		submitBtn.click();
+	}
+	
+	public void setUpload() {
+		uploadField.sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process.jpg");
+	}
+	
+	public void setRemainTextArea() {
+		for(int i=1;i<6;i++) {
+			textAreaFieldsRemaining.get(i).sendKeys("random text for testing");
+		}
 	}
 
 }

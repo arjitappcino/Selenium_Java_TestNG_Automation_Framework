@@ -119,8 +119,11 @@ public class RDIFCreation extends BaseClass {
 		objRDIF.addPropKeyContactDetails("p1", "p1@abc.com");
 		objRDIF.addSusDevContactDetails("s1", "s1@abc.com");
 		objRDIF.setScopeDefinition("some random text");
+		
+		objRDIF.setInsertFigure();
 		util.takeSnapShot();
-
+		Thread.sleep(1000);
+		
 		objRDIF.setParagraphQuantityFields("some random text");
 		util.takeSnapShot();
 
@@ -150,9 +153,14 @@ public class RDIFCreation extends BaseClass {
 
 		// page 3 - Environmental Assessment & Approvals
 
-		objRDIF.setAssignmentTimeframe("PAA name", randomInput.getRandomCategoryType(), "Master ESMP and SEA",
-				"12/15/2022", "Comments added");
+		objRDIF.setAssignmentTimeframe("PAA name", "Category III", "Master ESMP and SEA","12/15/2022", "Comments added");
 		util.takeSnapShot();
+		
+		objRDIF.setUpload();
+		util.takeSnapShot();
+		
+		objRDIF.setRemainTextArea();
+		Thread.sleep(2000);
 
 		objRDIF.clickSubmit();
 

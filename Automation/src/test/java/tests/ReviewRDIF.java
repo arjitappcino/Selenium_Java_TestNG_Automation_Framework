@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -23,7 +24,7 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class SurveyRequestForm extends BaseClass {
+public class ReviewRDIF extends BaseClass {
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -60,68 +61,73 @@ public class SurveyRequestForm extends BaseClass {
 	}
 
 	@Test
-	public void taskSurveyRequest() throws Exception {
+	public void taskReviewRDIF() throws Exception {
 		extent = getExtent();
-		ExtentTest logger = extent.startTest("Develop and Submit Survey Request to STT (ATR)");
-		// devTitle = "NEOM ATMN ID 5765";
+		ExtentTest logger = extent.startTest("Review and Accept RDIF");
+		//String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = properties.getProperty("currentProject");
 
-		String taskName = properties.getProperty("TASK_SURVEY_REQUEST_ATR");
+		String taskName = properties.getProperty("TASK_RDIF_REVIEW_ATR");
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful");
+		logger.log(LogStatus.PASS, "Login Successful ATR");
 
 		objHome.clickTaskBtn();
 		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
+		
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
 		task.click();
 		Thread.sleep(2000);
 		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Clicked - "+taskName+" for title - "+devTitle);
 
-		logger.log(LogStatus.PASS, "Task Page: Develop and Submit Survey Request to STT");
+		logger.log(LogStatus.PASS, "Task Page: Review and Accept RDIF");
 
 		objTaskPage.clickAcceptBtn();
 
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
-
-		objTaskPage.selectDepartment(randomInput.getRandomDepartment());
 		util.takeSnapShot();
-
-		logger.log(LogStatus.PASS, "Selected department");
-
-		objTaskPage.clickNextBtn();
-
-		objTaskPage.clickTerrestialScope("Bats");
-		logger.log(LogStatus.PASS, "Terrestial Scope Selected");
+		
+		WebElement element0 = driver.findElement(By.xpath("//strong[text()='DEVELOPMENT CONTEXT']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element0);
+		Thread.sleep(2000);
+		
 		util.takeSnapShot();
+		
+		//span[text()='COMMENTS']
+		WebElement element1 = driver.findElement(By.xpath("//span[text()='COMMENTS']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
+		Thread.sleep(2000);
+		
+		objTaskPage.setComment("Comment by ATR");
+		logger.log(LogStatus.PASS, "Comments entered");
 
-		objTaskPage.setDataDate("12/15/2022");
-		logger.log(LogStatus.PASS, "Date Selected");
+		objTaskPage.clickAcceptBtn();
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
+
 		util.takeSnapShot();
+//		objTaskPage.clickYesBtn();
 
-		objTaskPage.clickSubmitBtn();
-
-		Thread.sleep(1000);
-
+//		Thread.sleep(1000);
+//		objTaskPage.clickSubmitBtn();
+//		Thread.sleep(1000);
+//		objTaskPage.clickYesBtn();
+		Thread.sleep(4000);
 		util.takeSnapShot();
-		objTaskPage.clickYesBtn();
+		objSuccessPage.validateReviewRDIFTaskCompleted(devTitle);
 
-		Thread.sleep(1000);
-		objTaskPage.clickSubmitBtn();
-		Thread.sleep(1000);
-		objTaskPage.clickYesBtn();
-		Thread.sleep(5000);
-		util.takeSnapShot();
-		objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
-
-		logger.log(LogStatus.PASS, "Completed Survey Form Request Successfully");
+		logger.log(LogStatus.PASS, "Completed Review RDIF by ATR Successfully");
 
 	}
 
