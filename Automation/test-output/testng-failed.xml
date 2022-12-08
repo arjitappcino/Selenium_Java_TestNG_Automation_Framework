@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
+  <test thread-count="5" name="RDIF Creation(failed)">
+    <classes>
+      <class name="tests.RDIFCreation">
+        <methods>
+          <include name="beforeSuite"/>
+          <include name="createProjectRDIF"/>
+          <include name="setUp"/>
+          <include name="beforeTest"/>
+          <include name="afterSuitre"/>
+          <include name="endTest"/>
+        </methods>
+      </class> <!-- tests.RDIFCreation -->
+    </classes>
+  </test> <!-- RDIF Creation(failed) -->
+  <test thread-count="5" name="SRF(failed)">
+    <classes>
+      <class name="tests.SurveyRequestForm">
+        <methods>
+          <include name="taskSurveyRequest"/>
+          <include name="beforeSuite"/>
+          <include name="setUp"/>
+          <include name="beforeTest"/>
+          <include name="endTest"/>
+          <include name="afterSuitre"/>
+        </methods>
+      </class> <!-- tests.SurveyRequestForm -->
+    </classes>
+  </test> <!-- SRF(failed) -->
+</suite> <!-- Failed suite [Suite] -->
