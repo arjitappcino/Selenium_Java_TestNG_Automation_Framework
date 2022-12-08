@@ -49,7 +49,7 @@ public class RDIFCreation extends BaseClass {
 	String char250, char4k, devTitle;
 	String currentDirectory = System.getProperty("user.dir");
 	static String file_location = ".\\createRDIF.xlsx";
-	File screenshotFolder = new File("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots");
+	File screenshotFolder = new File(".\\screenshots");
 	Duration waitDuration = Duration.ofSeconds(10);
 	Random random = new Random();
 	int x = random.nextInt(10000);
