@@ -9,6 +9,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -25,6 +26,7 @@ import random.RandomDataInput;
 import utils.Utilities;
 
 public class ReviewRDIF extends BaseClass {
+
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -36,13 +38,14 @@ public class ReviewRDIF extends BaseClass {
 	RandomDataInput randomInput;
 	Actions action;
 	JavascriptExecutor je;
+	ExtentTest logger;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
 		this.driver = getDriver();
-		
+
 		objLogin = new LoginPageElements(driver);
 		objHome = new HomePageElements(driver);
 		objRDIF = new CreateRDIFPageElements(driver);
@@ -57,14 +60,14 @@ public class ReviewRDIF extends BaseClass {
 		properties = new Properties();
 		properties.load(in);
 		in.close();
-	
+
 	}
 
 	@Test
 	public void taskReviewRDIF() throws Exception {
 		extent = getExtent();
-		ExtentTest logger = extent.startTest("Review and Accept RDIF");
-		//String devTitle = "NEOM ATMN ID 2239";
+		logger = extent.startTest("Review and Accept RDIF");
+		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = properties.getProperty("currentProject");
 
@@ -80,7 +83,7 @@ public class ReviewRDIF extends BaseClass {
 		objHome.clickTaskBtn();
 		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
-		
+
 		objTaskPage.setSearch(devTitle);
 		Thread.sleep(1000);
 		objTaskPage.clickSearch();
@@ -89,8 +92,8 @@ public class ReviewRDIF extends BaseClass {
 		WebElement task = util.fetchTask(taskName, devTitle);
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - "+taskName+" for title - "+devTitle);
-		
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
 		Thread.sleep(4000);
 
 		logger.log(LogStatus.PASS, "Task Page: Review and Accept RDIF");
@@ -99,18 +102,18 @@ public class ReviewRDIF extends BaseClass {
 
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
-		
+
 		WebElement element0 = driver.findElement(By.xpath("//strong[text()='DEVELOPMENT CONTEXT']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element0);
 		Thread.sleep(2000);
-		
+
 		util.takeSnapShot();
-		
-		//span[text()='COMMENTS']
+
+		// span[text()='COMMENTS']
 		WebElement element1 = driver.findElement(By.xpath("//span[text()='COMMENTS']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
 		Thread.sleep(2000);
-		
+
 		objTaskPage.setComment("Comment by ATR");
 		logger.log(LogStatus.PASS, "Comments entered");
 
@@ -133,7 +136,18 @@ public class ReviewRDIF extends BaseClass {
 	}
 
 	@AfterMethod
-	public void endTest() {
-		driver.close();
+	public void getResult(ITestResult result) throws Exception {
+		String screenshotPath;
+		if (result.getStatus() == ITestResult.FAILURE) {
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+		} else if (result.getStatus() == ITestResult.SKIP) {
+			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
+		}
+		driver.quit();
 	}
 }

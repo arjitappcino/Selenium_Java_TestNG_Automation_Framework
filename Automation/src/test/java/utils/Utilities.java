@@ -25,11 +25,11 @@ public class Utilities{
 		this.driver = driver;
 	}
 
-	public void takeSnapShot() throws Exception {
+	public String takeSnapShot() throws Exception {
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
-		String filePath = ".\\screenshots\\"+BaseClass.projectName;
+		String filePath = System.getProperty("user.dir")+"/screenshots/"+BaseClass.projectName;
 		
 		System.out.println(filePath);
 
@@ -37,10 +37,13 @@ public class Utilities{
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
 
-		String scrShotname = "\\" + instantTime + ".png";
-		File DestFile = new File(filePath + scrShotname);
+		String scrShotname = "/" + instantTime + ".png";
+		String destination = filePath + scrShotname;
+		File DestFile = new File(destination);
 
 		FileUtils.copyFile(SrcFile, DestFile);
+		return destination;
+		
 
 	}
 

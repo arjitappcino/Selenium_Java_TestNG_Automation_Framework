@@ -8,6 +8,7 @@ import java.util.Properties;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -24,6 +25,7 @@ import random.RandomDataInput;
 import utils.Utilities;
 
 public class SurveyRequestForm extends BaseClass {
+	
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -35,13 +37,14 @@ public class SurveyRequestForm extends BaseClass {
 	RandomDataInput randomInput;
 	Actions action;
 	JavascriptExecutor je;
+	ExtentTest logger;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
 		this.driver = getDriver();
-		
+
 		objLogin = new LoginPageElements(driver);
 		objHome = new HomePageElements(driver);
 		objRDIF = new CreateRDIFPageElements(driver);
@@ -56,13 +59,13 @@ public class SurveyRequestForm extends BaseClass {
 		properties = new Properties();
 		properties.load(in);
 		in.close();
-	
+
 	}
 
 	@Test
 	public void taskSurveyRequest() throws Exception {
 		extent = getExtent();
-		ExtentTest logger = extent.startTest("Develop and Submit Survey Request to STT (ATR)");
+		logger = extent.startTest("Develop and Submit Survey Request to STT (ATR)");
 		// devTitle = "NEOM ATMN ID 5765";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = properties.getProperty("currentProject");
@@ -126,7 +129,18 @@ public class SurveyRequestForm extends BaseClass {
 	}
 
 	@AfterMethod
-	public void endTest() {
-		driver.close();
+	public void getResult(ITestResult result) throws Exception {
+		String screenshotPath;
+		if (result.getStatus() == ITestResult.FAILURE) {
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+		} else if (result.getStatus() == ITestResult.SKIP) {
+			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
+		}
+		driver.quit();
 	}
 }

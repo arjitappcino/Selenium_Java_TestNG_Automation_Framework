@@ -6,11 +6,11 @@
       <class name="tests.RDIFCreation">
         <methods>
           <include name="beforeSuite"/>
+          <include name="afterSuite"/>
           <include name="createProjectRDIF"/>
           <include name="setUp"/>
           <include name="beforeTest"/>
-          <include name="afterSuitre"/>
-          <include name="endTest"/>
+          <include name="getResult"/>
         </methods>
       </class> <!-- tests.RDIFCreation -->
     </classes>

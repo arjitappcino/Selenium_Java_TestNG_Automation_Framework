@@ -97,8 +97,8 @@ public class CreateRDIFPageElements {
 	@FindBy(xpath = "//label[text()='MasterPlan Project']")
 	WebElement masterProjectTypeBtn;
 
-	@FindBy(xpath = "//label[text()='Asset']")
-	WebElement assetTypeBtn;
+	@FindBy(xpath = "//label[text()='Project']")
+	WebElement singleProjectTypeBtn;
 
 	@FindBy(xpath = "//label[contains(text(),'Please Specify')]/parent::div/following-sibling::div//textarea")
 	WebElement otherTypoSpecifyField;
@@ -254,7 +254,7 @@ public class CreateRDIFPageElements {
 			break;
 
 		case "Asset":
-			assetTypeBtn.click();
+			singleProjectTypeBtn.click();
 			log.info("Selected Project Type = Asset");;
 			break;
 		}
