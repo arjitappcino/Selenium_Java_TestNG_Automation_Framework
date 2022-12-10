@@ -3,23 +3,16 @@ package tests;
 import java.awt.AWTException;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -49,17 +42,18 @@ public class RDIFCreation extends BaseClass {
 	String char250, char4k, devTitle;
 	String currentDirectory = System.getProperty("user.dir");
 	static String file_location = ".\\createRDIF.xlsx";
-	File screenshotFolder = new File("C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots");
+	File screenshotFolder = new File(".\\screenshots");
 	Duration waitDuration = Duration.ofSeconds(10);
 	Random random = new Random();
 	int x = random.nextInt(10000);
 	String id = String.valueOf(x);
-	Properties properties;
 	RandomDataInput randomInput;
 	Actions action;
 	Logger log;
 	HTMLReporter reporter;
 	ExtentTest logger;
+	ITestResult result;
+	String finalSCPath,screenshotPath;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
@@ -83,61 +77,71 @@ public class RDIFCreation extends BaseClass {
 		in.close();
 	}
 
-	public static String getScreenshot(WebDriver driver, String screenshotName) throws Exception {
-		String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-		TakesScreenshot ts = (TakesScreenshot) driver;
-		File source = ts.getScreenshotAs(OutputType.FILE);
-		String destination = System.getProperty("user.dir") + "/FailedTestsScreenshots/" + screenshotName + dateName
-				+ ".png";
-		File finalDestination = new File(destination);
-		FileUtils.copyFile(source, finalDestination);
-		return destination;
-	}
-
 	@Test
 	public void createProjectRDIF() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Create RDIF Project");
+		devTitle = getProjectName();
+		logger = extent.startTest("Create RDIF Project: "+devTitle);
 
 		// Login Proponent
 		driver.get(properties.getProperty("url_proponent"));
 		String userName = properties.getProperty("proponentUser");
 		String password = properties.getProperty("password");
 		objLogin.login(userName, password);
-		logger.log(LogStatus.PASS, "Login Successful");
+		logger.log(LogStatus.PASS, "Login Successful with Username: "+userName+", Password: "+password);
 
 		objHome.clickCreateProjectBtn();
 
-		logger.log(LogStatus.PASS, "Click create Project Button");
+		logger.log(LogStatus.PASS, "Clicked Create Project Button");
 
 		// page 1 - Development Details
-
-		objRDIF.selectRegion(randomInput.getRandomRegion());
-		objRDIF.selectSector(randomInput.getRandomSector());
-		devTitle = "NEOM ATMN ID " + id;
+		
+		String setRegion = randomInput.getRandomRegion();
+		objRDIF.selectRegion(setRegion);
+		logger.log(LogStatus.PASS,"Region selected: "+setRegion);
+		
+		String setSector =  randomInput.getRandomSector();
+		objRDIF.selectSector(setSector);
+		logger.log(LogStatus.PASS,"Sector Selected: "+setSector);
+		
 		objRDIF.setDevTitle(devTitle);
+		logger.log(LogStatus.PASS,"Development Title set: "+devTitle);
+		
 		objRDIF.addPropKeyContactDetails("p1", "p1@abc.com");
 		objRDIF.addSusDevContactDetails("s1", "s1@abc.com");
+		logger.log(LogStatus.PASS,"Proponent Key and Sus Dev Contact filled");
+		
 		objRDIF.setScopeDefinition("some random text");
+		logger.log(LogStatus.PASS,"Scope Definition set");
+		
+		objRDIF.setInsertFigure();
 		util.takeSnapShot();
-
+		Thread.sleep(1000);
+		logger.log(LogStatus.PASS,"Image uploaded");
+		
 		objRDIF.setParagraphQuantityFields("some random text");
 		util.takeSnapShot();
-
+		logger.log(LogStatus.PASS,"Paragraph fields set");
+		
 		objRDIF.selectKeyDates();
+		logger.log(LogStatus.PASS,"Dates selected");
+		
 		objRDIF.setRelatedDevelopment("some random text");
 		util.takeSnapShot();
+		logger.log(LogStatus.PASS,"Related Development set");
 
 		objRDIF.clickNextBtn();
 		Thread.sleep(3000);
-
+		logger.log(LogStatus.PASS,"Clicked Next Button");
+	
 		logger.log(LogStatus.PASS, "Page 1 Filled");
 
 		// page 2 - Development Context & Categorization
 
 		objRDIF.setStrategicAndPlanningContext("some random text");
-		String projectTypeRandom = randomInput.getRandomProjectType();
-		objRDIF.setProjectType(projectTypeRandom);
+		//String projectTypeRandom = randomInput.getRandomProjectType();
+		//objRDIF.setProjectType(projectTypeRandom);
+		objRDIF.setProjectType("Asset");
 		util.takeSnapShot();
 
 		objRDIF.setProjectTypology();
@@ -150,9 +154,14 @@ public class RDIFCreation extends BaseClass {
 
 		// page 3 - Environmental Assessment & Approvals
 
-		objRDIF.setAssignmentTimeframe("PAA name", randomInput.getRandomCategoryType(), "Master ESMP and SEA",
-				"12/15/2022", "Comments added");
+		objRDIF.setAssignmentTimeframe("PAA name", "Category III", "Master ESMP and SEA","12/15/2022", "Comments added");
 		util.takeSnapShot();
+		
+		objRDIF.setUpload();
+		util.takeSnapShot();
+		
+		objRDIF.setRemainTextArea();
+		Thread.sleep(2000);
 
 		objRDIF.clickSubmit();
 
@@ -168,69 +177,22 @@ public class RDIFCreation extends BaseClass {
 
 		logger.log(LogStatus.PASS, "RDIF Submitted = " + devTitle);
 
-		FileOutputStream out = new FileOutputStream(util.getPropertyFileLocation());
-		properties.setProperty("currentProject", devTitle);
-		properties.store(out, null);
-		out.close();
-
 	}
-
-	// @Test
-	public void taskRDIFReviewATR() throws Exception {
-
-		logger = extent.startTest("Review and Accept RDIF");
-
-		String taskName = properties.getProperty("TASK_RDIF_REVIEW_ATR");
-
-		String userName = properties.getProperty("assRepUser");
-		String password = properties.getProperty("password");
-
-		objLogin.login(userName, password);
-		Thread.sleep(2000);
-
-		objHome.clickTaskBtn();
-
-		WebElement task = util.fetchTask(taskName, this.devTitle);
-		task.click();
-		Thread.sleep(2000);
-		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "RDIF Submitted");
-
-	}
-
-//	@AfterMethod
-//	public void getResult(ITestResult result) throws Exception {
-//		if (result.getStatus() == ITestResult.FAILURE) {
-//			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
-//			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
-//			String screenshotPath = NEOMBusinessFlow.getScreenshot(driver, result.getName());
-//			// To add it in the extent report
-//			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
-//		} else if (result.getStatus() == ITestResult.SKIP) {
-//			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
-//			String screenshotPath = NEOMBusinessFlow.getScreenshot(driver, result.getName());
-//			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
-//		}else if (result.getStatus() == ITestResult.SUCCESS) {
-//			logger.log(LogStatus.PASS, "Test Case Passes is " + result.getName());
-//			String screenshotPath = NEOMBusinessFlow.getScreenshot(driver, result.getName());
-//			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
-//		}
-//		// ending test
-//		// endTest(logger) : It ends the current test and prepares to create HTML report
-//		extent.endTest(logger);
-//	}
-
+	
 	@AfterMethod
-	public void endTest() {
-		driver.close();
+	public void getResult(ITestResult result) throws Exception {
+		String screenshotPath;
+		if (result.getStatus() == ITestResult.FAILURE) {
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
+			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+		} else if (result.getStatus() == ITestResult.SKIP) {
+			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
+			screenshotPath = util.takeSnapShot();
+			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
+		}
+		driver.quit();
 	}
-
-//	@DataProvider
-//	public Object[][] registerData() throws Exception {
-//
-//		Object[][] testObjArray = DataFetch.readExcel(file_location, SheetName);
-//
-//		return (testObjArray);
-//
-//	}
+	
 }

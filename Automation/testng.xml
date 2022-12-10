@@ -7,9 +7,15 @@
 		</classes>
 	</test>
 
-	<test name="SRF">
+	<!--<test name="SRF">
 		<classes>
 			<class name="tests.SurveyRequestForm" />
 		</classes>
-	</test> <!-- Test -->
-</suite> <!-- Suite -->
+	</test>
+
+	<test name="Review RDIF">
+		<classes>
+			<class name="tests.ReviewRDIF" />
+		</classes>
+	</test>-->
+</suite> 

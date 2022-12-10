@@ -15,7 +15,9 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Utilities {
+import tests.BaseClass;
+
+public class Utilities{
 
 	WebDriver driver;
 
@@ -23,19 +25,25 @@ public class Utilities {
 		this.driver = driver;
 	}
 
-	public void takeSnapShot() throws Exception {
+	public String takeSnapShot() throws Exception {
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
-		String filePath = "C:\\Users\\arjit.yadav\\eclipse-workspace\\Automation\\screenshots";
+		String filePath = System.getProperty("user.dir")+"/screenshots/"+BaseClass.projectName;
+		
+		System.out.println(filePath);
+
 
 		TakesScreenshot scrShot = ((TakesScreenshot) driver);
 		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
 
-		String scrShotname = "\\" + instantTime + ".png";
-		File DestFile = new File(filePath + scrShotname);
+		String scrShotname = "/" + instantTime + ".png";
+		String destination = filePath + scrShotname;
+		File DestFile = new File(destination);
 
 		FileUtils.copyFile(SrcFile, DestFile);
+		return destination;
+		
 
 	}
 
