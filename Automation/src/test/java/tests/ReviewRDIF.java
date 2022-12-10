@@ -44,6 +44,7 @@ public class ReviewRDIF extends BaseClass {
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
+		
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -66,12 +67,12 @@ public class ReviewRDIF extends BaseClass {
 	@Test
 	public void taskReviewRDIF() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Review and Accept RDIF");
+		String taskName = properties.getProperty("TASK_RDIF_REVIEW_ATR");
+		logger = extent.startTest(taskName);
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = properties.getProperty("currentProject");
 
-		String taskName = properties.getProperty("TASK_RDIF_REVIEW_ATR");
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
@@ -96,7 +97,7 @@ public class ReviewRDIF extends BaseClass {
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: Review and Accept RDIF");
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
 
 		objTaskPage.clickAcceptBtn();
 

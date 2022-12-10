@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Random;
 
-import org.apache.commons.io.FileUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.openqa.selenium.WebDriver;
@@ -33,19 +32,15 @@ public class BaseClass {
 	static Random random = new Random();
 	static int x = random.nextInt(10000);
 	static String id = String.valueOf(x);
-	public static String projectName = "NEOM ATMN ID " + id;;
+	public static String projectName = "NEOM ATMN ID " + id;
+	//public static String projectName = "NEOM ATMN ID 8745";
 	Utilities util = new Utilities(driver);
 	Properties properties;
 	String currentDirectory = System.getProperty("user.dir");
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
-		FileUtils.cleanDirectory(screenshotFolder);
-		String screenshotPath = ".\\screenshots\\" + projectName;
-		File theDir = new File(screenshotPath);
-		if (!theDir.exists()) {
-			theDir.mkdirs();
-		}
+		//FileUtils.cleanDirectory(screenshotFolder);
 
 		FileInputStream in = new FileInputStream(util.getPropertyFileLocation());
 		properties = new Properties();
@@ -68,6 +63,7 @@ public class BaseClass {
 	@BeforeTest
 	public void setUp() throws AWTException, InterruptedException {
 		startSeleniumSession();
+		
 	}
 
 	@SuppressWarnings("deprecation")

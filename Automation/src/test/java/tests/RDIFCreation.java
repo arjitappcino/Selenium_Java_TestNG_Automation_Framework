@@ -59,6 +59,13 @@ public class RDIFCreation extends BaseClass {
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
+		
+		String screenshotPath = ".\\screenshots\\" + projectName;
+		File theDir = new File(screenshotPath);
+		if (!theDir.exists()) {
+			theDir.mkdirs();
+		}
+		
 		this.driver = getDriver();
 		
 		objLogin = new LoginPageElements(driver);
@@ -153,8 +160,10 @@ public class RDIFCreation extends BaseClass {
 		logger.log(LogStatus.PASS, "Page 2 Filled");
 
 		// page 3 - Environmental Assessment & Approvals
+		
+		String cat = properties.getProperty("category");
 
-		objRDIF.setAssignmentTimeframe("PAA name", "Category III", "Master ESMP and SEA","12/15/2022", "Comments added");
+		objRDIF.setAssignmentTimeframe("PAA name", cat, "Master ESMP and SEA","12/15/2022", "Comments added");
 		util.takeSnapShot();
 		
 		objRDIF.setUpload();

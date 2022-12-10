@@ -3,16 +3,16 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.RDIFCreation">
+      <class name="tests.FillScreeningForm">
         <methods>
+          <include name="beforeTest"/>
           <include name="beforeSuite"/>
           <include name="afterSuite"/>
-          <include name="createProjectRDIF"/>
           <include name="setUp"/>
-          <include name="beforeTest"/>
+          <include name="taskFillScreeningForm"/>
           <include name="getResult"/>
         </methods>
-      </class> <!-- tests.RDIFCreation -->
+      </class> <!-- tests.FillScreeningForm -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

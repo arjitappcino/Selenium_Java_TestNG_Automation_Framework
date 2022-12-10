@@ -65,12 +65,12 @@ public class SurveyRequestForm extends BaseClass {
 	@Test
 	public void taskSurveyRequest() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Develop and Submit Survey Request to STT (ATR)");
+		String taskName = properties.getProperty("TASK_SURVEY_REQUEST_ATR");
+		logger = extent.startTest(taskName);
 		// devTitle = "NEOM ATMN ID 5765";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = properties.getProperty("currentProject");
 
-		String taskName = properties.getProperty("TASK_SURVEY_REQUEST_ATR");
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
@@ -88,7 +88,7 @@ public class SurveyRequestForm extends BaseClass {
 		Thread.sleep(2000);
 		util.takeSnapShot();
 
-		logger.log(LogStatus.PASS, "Task Page: Develop and Submit Survey Request to STT");
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
 
 		objTaskPage.clickAcceptBtn();
 
