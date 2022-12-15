@@ -44,7 +44,7 @@ public class ReviewRDIF extends BaseClass {
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
-		
+
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -97,37 +97,47 @@ public class ReviewRDIF extends BaseClass {
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: " + taskName);
 
 		objTaskPage.clickAcceptBtn();
 
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
+		
+		objTaskPage.checkPageProgress("Development Details","Completed");
+		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
+		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		
+		//objRDIF.setCommentReviewRdif("Comments by ATR");
+		objTaskPage.clickNextBtn();
+		
+		objTaskPage.checkPageProgress("Development Details","Completed");
+		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
+		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		
+		//objRDIF.setCommentReviewRdif("Comments by ATR");
+		objTaskPage.clickNextBtn();
 
-		WebElement element0 = driver.findElement(By.xpath("//strong[text()='DEVELOPMENT CONTEXT']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element0);
-		Thread.sleep(2000);
+		// page 3 - Environmental Assessment & Approvals
 
+		String cat = properties.getProperty("category");
+
+		objRDIF.setAssignmentTimeframe("PAA name", cat, "Scoping, ENVID, ESIA Category III and ESMP Report", "12/15/2022", "Comments added");
 		util.takeSnapShot();
 
-		// span[text()='COMMENTS']
-		WebElement element1 = driver.findElement(By.xpath("//span[text()='COMMENTS']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
-		Thread.sleep(2000);
+		objRDIF.setUpload();
+		util.takeSnapShot();
 
-		objTaskPage.setComment("Comment by ATR");
+		objRDIF.setRemainTextArea();
+		Thread.sleep(2000);
+		
+		objRDIF.setCommentReviewRdif("Comments by ATR");
 		logger.log(LogStatus.PASS, "Comments entered");
-
-		objTaskPage.clickAcceptBtn();
+		
+		objTaskPage.clickAcceptBottomBtn();
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
 
 		util.takeSnapShot();
-//		objTaskPage.clickYesBtn();
-
-//		Thread.sleep(1000);
-//		objTaskPage.clickSubmitBtn();
-//		Thread.sleep(1000);
-//		objTaskPage.clickYesBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		objSuccessPage.validateReviewRDIFTaskCompleted(devTitle);
@@ -142,12 +152,15 @@ public class ReviewRDIF extends BaseClass {
 		if (result.getStatus() == ITestResult.FAILURE) {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
-			screenshotPath = util.takeSnapShot();
+			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
-			screenshotPath = util.takeSnapShot();
+			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
+		} else if (result.getStatus() == ITestResult.SUCCESS) {
+			screenshotPath = util.captureFinalScreenshot();
+			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

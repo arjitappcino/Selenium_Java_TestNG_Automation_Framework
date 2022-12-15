@@ -7,15 +7,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Properties;
-import java.util.Random;
-
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.xml.DOMConfigurator;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.BeforeTest;
@@ -29,19 +31,20 @@ public class BaseClass {
 	ExtentTest logger;
 	File screenshotFolder = new File(".\\screenshots");
 	static ExtentReports extent;
-	static Random random = new Random();
-	static int x = random.nextInt(10000);
-	static String id = String.valueOf(x);
-	public static String projectName = "NEOM ATMN ID " + id;
-	//public static String projectName = "NEOM ATMN ID 8745";
+	static String alpha = RandomStringUtils.randomAlphabetic(4).toUpperCase();
+	static String numeric = RandomStringUtils.randomNumeric(4);
+	//public static String projectName = "ATMN ID " +alpha+ numeric;
+	public static String projectName = "ATMN ID IJXS4332";
 	Utilities util = new Utilities(driver);
 	Properties properties;
 	String currentDirectory = System.getProperty("user.dir");
+	Robot robot;
+	Duration waitDuration = Duration.ofSeconds(300);
+	WebDriverWait wait;
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
 		//FileUtils.cleanDirectory(screenshotFolder);
-
 		FileInputStream in = new FileInputStream(util.getPropertyFileLocation());
 		properties = new Properties();
 		properties.load(in);
@@ -63,6 +66,7 @@ public class BaseClass {
 	@BeforeTest
 	public void setUp() throws AWTException, InterruptedException {
 		startSeleniumSession();
+		Thread.sleep(5000);
 		
 	}
 
@@ -70,13 +74,16 @@ public class BaseClass {
 	public void startSeleniumSession() throws AWTException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
 		ChromeOptions capability = new ChromeOptions();
+		//capability.addArguments("--window-size=1600,600");
+		//capability.addArguments("--start-maximized");
+		//capability.addArguments("--headless");
 		capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 		driver = new ChromeDriver(capability);
 
 		driver.manage().window().maximize();
 
-		Robot robot = new Robot();
+		robot = new Robot();
 		robot.keyPress(KeyEvent.VK_CONTROL);
 		robot.keyPress(KeyEvent.VK_SUBTRACT);
 		robot.keyRelease(KeyEvent.VK_SUBTRACT);

@@ -1,40 +1,64 @@
 package utils;
 
+import java.awt.image.BufferedImage;
+import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Properties;
 
+import javax.imageio.ImageIO;
+
+import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import tests.BaseClass;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 
 public class Utilities{
 
 	WebDriver driver;
+	TakesScreenshot scrShot;
+	static TakesScreenshot finalScrShot;
+	Properties properties;
 
 	public Utilities(WebDriver driver) {
 		this.driver = driver;
 	}
 
 	public String takeSnapShot() throws Exception {
+		
+		FileInputStream in = new FileInputStream(getPropertyFileLocation());
+		properties = new Properties();
+		properties.load(in);
+		in.close();
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
-		String filePath = System.getProperty("user.dir")+"/screenshots/"+BaseClass.projectName;
+		String projectName = properties.getProperty("currentProject");
+		String filePath = System.getProperty("user.dir")+"/screenshots/"+projectName;
 		
 		System.out.println(filePath);
-
-
-		TakesScreenshot scrShot = ((TakesScreenshot) driver);
+		scrShot = ((TakesScreenshot) driver);
 		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
 
 		String scrShotname = "/" + instantTime + ".png";
@@ -88,5 +112,37 @@ public class Utilities{
 	
 	public String getPropertyFileLocation() {
 		return ".\\src\\test\\java\\config.properties";
+	}
+	
+	public String captureFullScreenView() throws IOException {
+		Screenshot s=new AShot().shootingStrategy(ShootingStrategies.viewportPasting(1000)).takeScreenshot(driver);
+        //ImageIO.write(s.getImage(),"PNG",new File("C:\\projectScreenshots\\fullPageScreenshot.png"));
+        String path = imgToBase64String(s.getImage(),"png");
+        
+		return "data:image/gif;base64,"+path;
+		
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static String imgToBase64String(final RenderedImage img, final String formatName) {
+	    final ByteArrayOutputStream os = new ByteArrayOutputStream();
+	    try (final OutputStream b64os = Base64.getEncoder().wrap(os)) {
+	        ImageIO.write(img, formatName, b64os);
+	    } catch (final IOException ioe) {
+	        throw new UncheckedIOException(ioe);
+	    }
+	    return os.toString();
+	}
+	
+	public String captureFinalScreenshot(){
+		finalScrShot = ((TakesScreenshot) driver);
+		String screenshotBase64 = finalScrShot.getScreenshotAs(OutputType.BASE64);
+		screenshotBase64 = "data:image/gif;base64," + screenshotBase64;
+		return screenshotBase64;
+	}
+	
+	public void waitForElement(String strXpath) {
+	    WebDriverWait wait = new WebDriverWait(driver,Duration.ofMillis(60000));
+	    WebElement element =  wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(strXpath)));
 	}
 }

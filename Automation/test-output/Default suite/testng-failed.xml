@@ -3,16 +3,16 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="tests.FillScreeningForm">
+      <class name="tests.SurveyRequestForm">
         <methods>
-          <include name="beforeTest"/>
+          <include name="taskSurveyRequest"/>
           <include name="beforeSuite"/>
+          <include name="getResult"/>
           <include name="afterSuite"/>
           <include name="setUp"/>
-          <include name="taskFillScreeningForm"/>
-          <include name="getResult"/>
+          <include name="beforeTest"/>
         </methods>
-      </class> <!-- tests.FillScreeningForm -->
+      </class> <!-- tests.SurveyRequestForm -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

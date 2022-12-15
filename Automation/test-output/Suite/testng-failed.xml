@@ -1,60 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Failed suite [Suite]" guice-stage="DEVELOPMENT">
-  <test thread-count="5" name="RDIF Creation(failed)">
+  <test thread-count="5" name="Accept Screening Form(failed)">
     <classes>
-      <class name="tests.RDIFCreation">
+      <class name="tests.AcceptScreeningFormByATSM">
         <methods>
-          <include name="beforeSuite"/>
-          <include name="afterSuite"/>
-          <include name="createProjectRDIF"/>
-          <include name="setUp"/>
           <include name="beforeTest"/>
           <include name="getResult"/>
-        </methods>
-      </class> <!-- tests.RDIFCreation -->
-    </classes>
-  </test> <!-- RDIF Creation(failed) -->
-  <test thread-count="5" name="SRF(failed)">
-    <classes>
-      <class name="tests.SurveyRequestForm">
-        <methods>
-          <include name="taskSurveyRequest"/>
-          <include name="beforeSuite"/>
-          <include name="getResult"/>
-          <include name="afterSuite"/>
-          <include name="setUp"/>
-          <include name="beforeTest"/>
-        </methods>
-      </class> <!-- tests.SurveyRequestForm -->
-    </classes>
-  </test> <!-- SRF(failed) -->
-  <test thread-count="5" name="Review RDIF(failed)">
-    <classes>
-      <class name="tests.ReviewRDIF">
-        <methods>
+          <include name="taskReviewApproveScreeningFormATM"/>
           <include name="beforeSuite"/>
           <include name="afterSuite"/>
-          <include name="beforeTest"/>
           <include name="setUp"/>
-          <include name="taskReviewRDIF"/>
-          <include name="getResult"/>
         </methods>
-      </class> <!-- tests.ReviewRDIF -->
+      </class> <!-- tests.AcceptScreeningFormByATSM -->
     </classes>
-  </test> <!-- Review RDIF(failed) -->
-  <test thread-count="5" name="Fill Screening Form(failed)">
-    <classes>
-      <class name="tests.FillScreeningForm">
-        <methods>
-          <include name="beforeSuite"/>
-          <include name="beforeTest"/>
-          <include name="afterSuite"/>
-          <include name="setUp"/>
-          <include name="taskFillScreeningForm"/>
-          <include name="getResult"/>
-        </methods>
-      </class> <!-- tests.FillScreeningForm -->
-    </classes>
-  </test> <!-- Fill Screening Form(failed) -->
+  </test> <!-- Accept Screening Form(failed) -->
 </suite> <!-- Failed suite [Suite] -->

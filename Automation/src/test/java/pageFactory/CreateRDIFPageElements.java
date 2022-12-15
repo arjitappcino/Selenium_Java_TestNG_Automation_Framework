@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import random.RandomDataInput;
 import utils.Utilities;
@@ -56,19 +57,19 @@ public class CreateRDIFPageElements {
 	@FindBy(xpath = "//label[contains(text(),'Scope Definition')]/parent::div/following-sibling::div//textarea")
 	WebElement scopeDefinitionField;
 
-	@FindBy(xpath = "//strong[text()='Types And Estimated Quantities Of Raw Materials']/ancestor::div[3]/following-sibling::div//textarea")
+	@FindBy(xpath = "//strong[text()='Types And Estimated Quantities Of Raw Materials*']/ancestor::div[3]/following-sibling::div//textarea")
 	WebElement TypesEstimatedQuantities1;
 
-	@FindBy(xpath = "//strong[text()='Raw Materials Sources']/ancestor::div[3]/following-sibling::div//textarea")
+	@FindBy(xpath = "//strong[text()='Raw Materials Sources*']/ancestor::div[3]/following-sibling::div//textarea")
 	WebElement TypesEstimatedQuantities2;
 
-	@FindBy(xpath = "//strong[text()='Estimated Energy Requirements']/ancestor::div[3]/following-sibling::div//textarea")
+	@FindBy(xpath = "//strong[text()='Estimated Energy Requirements*']/ancestor::div[3]/following-sibling::div//textarea")
 	public WebElement TypesEstimatedQuantities3;
 
-	@FindBy(xpath = "//strong[text()='Energy Sources']/ancestor::div[3]/following-sibling::div//textarea")
+	@FindBy(xpath = "//strong[text()='Energy Sources*']/ancestor::div[3]/following-sibling::div//textarea")
 	WebElement TypesEstimatedQuantities4;
 
-	@FindBy(xpath = "//strong[text()='Fuel Types And Estimated Quantities']/ancestor::div[3]/following-sibling::div//textarea")
+	@FindBy(xpath = "//strong[text()='Fuel Types And Estimated Quantities*']/ancestor::div[3]/following-sibling::div//textarea")
 	WebElement TypesEstimatedQuantities5;
 
 	@FindBy(xpath = "//button[text()='Cancel']")
@@ -82,16 +83,16 @@ public class CreateRDIFPageElements {
 
 	@FindBy(xpath = "//label[text()='Related Developments']/parent::div//following-sibling::div//textarea")
 	WebElement relatedDevField;
-	
-	@FindBy(xpath="//span[text()='Insert Figure']/parent::div/following-sibling::div//input")
+
+	@FindBy(xpath = "//span[text()='Insert Figure']/parent::div/following-sibling::div//input")
 	WebElement insertFigure;
 
 	// page 2 elements
 
-	@FindBy(xpath = "//label[text()='STRATEGIC CONTEXT']/parent::div/following-sibling::div//textarea")
+	@FindBy(xpath = "//label[text()='Strategic Context']/parent::div/following-sibling::div//textarea")
 	WebElement strategicContextField;
 
-	@FindBy(xpath = "//label[text()='PLANNING CONTEXT']/parent::div/following-sibling::div//textarea")
+	@FindBy(xpath = "//label[text()='Planning Context']/parent::div/following-sibling::div//textarea")
 	WebElement planningContextField;
 
 	@FindBy(xpath = "//label[text()='MasterPlan Project']")
@@ -103,38 +104,43 @@ public class CreateRDIFPageElements {
 	@FindBy(xpath = "//label[contains(text(),'Please Specify')]/parent::div/following-sibling::div//textarea")
 	WebElement otherTypoSpecifyField;
 	
-	//page 3 elements
+	@FindBy(xpath="//label[text()='Comments']/parent::div/following-sibling::div//textarea")
+	WebElement commentField;
 	
-	@FindBy(xpath="//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//input[@placeholder='']")
+	@FindBy(xpath="//label[text()='Scale, Complexity and Sensitivity']/parent::div/following-sibling::div//textarea")
+	WebElement textareaScaleSense;
+
+	// page 3 elements
+
+	@FindBy(xpath = "//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//input[@placeholder='']")
 	WebElement projectAreaField;
-	
-	@FindBy(xpath="//div[text()='Please Select Category']")
+
+	@FindBy(xpath = "//div[text()='Please Select Category']")
 	WebElement categoryTimeFrame;
-	
-	@FindBy(xpath="//div[text()='Please Select Deliverables']")
+
+	@FindBy(xpath = "//div[text()='Please Select Deliverables']")
 	WebElement deliverablesTimeFrame;
-	
-	@FindBy(xpath="//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//input[@placeholder='mm/dd/yyyy']")
+
+	@FindBy(xpath = "//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//input[@placeholder='mm/dd/yyyy']")
 	WebElement dateApproval;
-	
-	@FindBy(xpath="//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//textarea")
+
+	@FindBy(xpath = "//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//textarea")
 	WebElement commentFieldTimeFrame;
-	
+
 	@FindBy(xpath = "//button[text()='Submit']")
 	WebElement submitBtn;
-	
-	@FindBy(xpath="//span[text()='Upload']/parent::div/following-sibling::div//input")
+
+	@FindBy(xpath = "//span[text()='Upload']/parent::div/following-sibling::div//input")
 	WebElement uploadField;
-	
+
 	@FindBys({ @FindBy(xpath = "//textarea") })
 	public List<WebElement> textAreaFieldsRemaining;
-	
 
 	public CreateRDIFPageElements(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		util = new Utilities(driver);
-		wait = new WebDriverWait(driver,waitDuration);
+		wait = new WebDriverWait(driver, waitDuration);
 		randomInput = new RandomDataInput(driver);
 	}
 
@@ -142,40 +148,40 @@ public class CreateRDIFPageElements {
 
 	public void setDevTitle(String strTitle) {
 		devTitle.sendKeys(strTitle);
-		log.info("Development Title = "+strTitle);
+		log.info("Development Title = " + strTitle);
 	}
 
 	public void selectRegion(String strRegion) {
 
 		region.click();
 		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strRegion + "']")).click();
-		log.info("region selected = "+strRegion);
+		log.info("region selected = " + strRegion);
 	}
 
 	public void selectSector(String strSector) {
 
 		sector.click();
 		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strSector + "']")).click();
-		log.info("sector selected = "+strSector);
+		log.info("sector selected = " + strSector);
 	}
 
 	public void addPropKeyContactDetails(String strName, String strEmail) {
 		propContactName.sendKeys(strName);
 		propContactEmail.sendKeys(strEmail);
-		log.info("Proponent Key Contact(s) = "+strName+", "+strEmail);
+		log.info("Proponent Key Contact(s) = " + strName + ", " + strEmail);
 	}
 
 	public void addSusDevContactDetails(String strName, String strEmail) {
 		susContactName.sendKeys(strName);
 		susContactEmail.sendKeys(strEmail);
-		log.info("Sustainability Development Team Key Contact(s) = "+strName+", "+strEmail);
+		log.info("Sustainability Development Team Key Contact(s) = " + strName + ", " + strEmail);
 	}
 
 	public void setScopeDefinition(String strScope) throws Exception {
 		scopeDefinitionField.sendKeys(strScope);
 		log.info("Scope Definition Entered");
 		util.takeSnapShot();
-		
+
 		WebElement element = driver.findElement(By.xpath("//label[text()='Scope Definition']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
@@ -183,7 +189,7 @@ public class CreateRDIFPageElements {
 	}
 
 	public void setParagraphQuantityFields(String strLorem) throws InterruptedException {
-		
+
 		WebElement element = driver.findElement(By.xpath("//div[contains(text(),'Supported Types')]"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
@@ -193,7 +199,7 @@ public class CreateRDIFPageElements {
 		TypesEstimatedQuantities3.sendKeys(strLorem);
 		TypesEstimatedQuantities4.sendKeys(strLorem);
 		TypesEstimatedQuantities5.sendKeys(strLorem);
-		
+
 		log.info("Filled paragraph Quantity fields");
 
 	}
@@ -203,25 +209,27 @@ public class CreateRDIFPageElements {
 		log.info("Cancel button clicked");
 	}
 
-	public void clickNextBtn() {
+	public void clickNextBtn() throws InterruptedException {
+		WebElement element = driver.findElement(By.xpath("//button[text()='Next']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(1000);
 		nextBtn.click();
 		log.info("Next Button clicked");
 	}
 
 	public void selectKeyDates() throws InterruptedException {
-		WebElement element1 = driver.findElement(By.xpath("//span[text()='Key Dates']"));
+		WebElement element1 = driver.findElement(By.xpath("//span[text()='Key Dates*']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
 		Thread.sleep(2000);
-		
+
 		ArrayList<String> arrDates = new ArrayList<String>(util.keyDates());
 		int j = 1;
 		for (int i = 0; i < 10; i++) {
 			inputKeyDate.get(i).sendKeys(arrDates.get(i));
-			if(i%2==0) {
-				log.info("Start date for stage["+j+"]= "+arrDates.get(i));
-			}
-			else {
-				log.info("End date for stage["+j+"]= "+arrDates.get(i));
+			if (i % 2 == 0) {
+				log.info("Start date for stage[" + j + "]= " + arrDates.get(i));
+			} else {
+				log.info("End date for stage[" + j + "]= " + arrDates.get(i));
 				j++;
 			}
 		}
@@ -231,13 +239,13 @@ public class CreateRDIFPageElements {
 		relatedDevField.sendKeys(strRelatedDev);
 		log.info("Related Development Filled.");
 	}
-	
+
 	public void setInsertFigure() {
 		insertFigure.sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\user.xlsx");
 	}
 
 	// page 2 methods
-	
+
 	public void setStrategicAndPlanningContext(String strPara) {
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[text()='DEVELOPMENT CONTEXT']")));
 		strategicContextField.sendKeys(strPara);
@@ -253,30 +261,34 @@ public class CreateRDIFPageElements {
 			log.info("Selected Project Type = Master Project");
 			break;
 
-		case "Asset":
+		case "Project":
 			singleProjectTypeBtn.click();
-			log.info("Selected Project Type = Asset");;
+			log.info("Selected Project Type = Asset");
+			;
 			break;
 		}
 	}
 
-	public void setProjectTypology() throws InterruptedException {
-		
+	public boolean setProjectTypology() throws InterruptedException {
+
 		WebElement element2 = driver.findElement(By.xpath("//span[text()='Type']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element2);
-		
+
 		Thread.sleep(2000);
-		
+		boolean starEntry = false;
 		String strTypology;
+		int count = 0;
 		if (projectType == "MasterPlan Project") {
 			ArrayList<String> randTypoList = new ArrayList<String>();
 			randTypoList = randomInput.getRandomProjectTypology();
-			
+
 			for (int i = 0; i < randTypoList.size(); i++) {
 				
 				strTypology = randTypoList.get(i);
-				driver.findElement(By.xpath("//label[text()='"+strTypology+"']")).click();
-				
+				driver.findElement(By.xpath("//label[text()='" + strTypology + "']")).click();
+				if(strTypology.contains("*")==true) {
+					count = count +1;
+				}
 				if (strTypology == "Other") {
 					Thread.sleep(1000);
 					otherTypoSpecifyField.sendKeys("Other Specified");
@@ -286,57 +298,85 @@ public class CreateRDIFPageElements {
 
 		else {
 			strTypology = randomInput.getRandomAssetTopology();
-			driver.findElement(By.xpath("//label[text()='"+strTypology+"']")).click();
+			driver.findElement(By.xpath("//label[text()='" + strTypology + "']")).click();
+			if(strTypology.contains("*")==true) {
+				count = count +1;
+			}
 			if (strTypology == "Other") {
 				Thread.sleep(1000);
 				otherTypoSpecifyField.sendKeys("Other Specified");
 			}
-			log.info("Typology selected = "+strTypology);
+			log.info("Typology selected = " + strTypology);
 		}
+		
+		if(count>=1) {
+			starEntry=true;
+		}
+		return starEntry;
+	}
+
+	public void setCommentReviewRdif(String strComment) throws InterruptedException {
+		
+		WebElement element = driver.findElement(By.xpath("//label[text()='Comments']/parent::div/following-sibling::div//textarea"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+		commentField.sendKeys(strComment);
 	}
 	
-	//page 3 methods
-	
-	public void setAssignmentTimeframe(String strPAA, String strCategory, String strDeliverables, String strDate, String strComment) throws InterruptedException {
+	public void setScaleSensitivity(String strText) throws InterruptedException {
+		WebElement element = driver.findElement(By.xpath("//label[text()='Scale, Complexity and Sensitivity']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+		textareaScaleSense.sendKeys(strText);
+		log.info("Scale Sensitivity set");
 		
+	}
+	
+	// page 3 methods
+
+	public void setAssignmentTimeframe(String strPAA, String strCategory, String strDeliverables, String strDate,
+			String strComment) throws InterruptedException {
+
 		WebElement element3 = driver.findElement(By.xpath("//strong[text()='ENVIRONMENTAL ASSESSMENT & APPROVALS']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element3);
 		Thread.sleep(2000);
-		
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[text()='ENVIRONMENTAL ASSESSMENT & APPROVALS']")));
-		
-		
+
+		wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("//strong[text()='ENVIRONMENTAL ASSESSMENT & APPROVALS']")));
+
 		projectAreaField.sendKeys(strPAA);
-		
+
 		categoryTimeFrame.click();
 		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strCategory + "']")).click();
-		
-		if(strCategory!="Below Assessment Category") {
+
+		if (strCategory != "Below Assessment Category") {
 			
-			//deliverablesTimeFrame.click();
-			//driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strDeliverables + "']")).click();
-			
+			 Thread.sleep(2000);
+			 deliverablesTimeFrame.click();
+			 driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='"
+			 + strDeliverables + "']")).click();
+
 			dateApproval.sendKeys(strDate);
-		
+
 		}
-		
+
 		commentFieldTimeFrame.sendKeys(strComment);
 	}
-	
+
 	public void clickSubmit() throws InterruptedException {
-		WebElement element4 = driver.findElement(By.xpath("//span[text()='Upload']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element4);
+		WebElement element = driver.findElement(By.xpath("//button[text()='Submit']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
-		
+
 		submitBtn.click();
 	}
-	
+
 	public void setUpload() {
 		uploadField.sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process.jpg");
 	}
-	
+
 	public void setRemainTextArea() {
-		for(int i=1;i<6;i++) {
+		for (int i = 1; i < 6; i++) {
 			textAreaFieldsRemaining.get(i).sendKeys("random text for testing");
 		}
 	}

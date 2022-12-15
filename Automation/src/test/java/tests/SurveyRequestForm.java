@@ -1,10 +1,15 @@
 package tests;
 
 import java.awt.AWTException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -22,6 +27,9 @@ import pageFactory.LoginPageElements;
 import pageFactory.SuccessPageElements;
 import pageFactory.TaskPageElements;
 import random.RandomDataInput;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import utils.Utilities;
 
 public class SurveyRequestForm extends BaseClass {
@@ -77,52 +85,67 @@ public class SurveyRequestForm extends BaseClass {
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful");
+		logger.log(LogStatus.PASS, "Login Successful ATR");
 
 		objHome.clickTaskBtn();
 		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
+		
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(7000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
 		task.click();
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		util.takeSnapShot();
 
 		logger.log(LogStatus.PASS, "Task Page: "+taskName);
 
-		objTaskPage.clickAcceptBtn();
-
+		//objTaskPage.clickAcceptBtn();
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		Thread.sleep(2000);
 
 		objTaskPage.selectDepartment(randomInput.getRandomDepartment());
 		util.takeSnapShot();
 
 		logger.log(LogStatus.PASS, "Selected department");
 
-		objTaskPage.clickNextBtn();
-
-		objTaskPage.clickTerrestialScope("Bats");
-		logger.log(LogStatus.PASS, "Terrestial Scope Selected");
+		List<WebElement> inputFields = driver.findElements(By.xpath("//input[@type='text']"));
+		inputFields.get(0).sendKeys("12/31/2022");
+		logger.log(LogStatus.PASS, "Date set");
+		List<WebElement> textAreas = driver.findElements(By.xpath("//textarea"));
+		textAreas.get(0).sendKeys("Random values");
+		textAreas.get(1).sendKeys("Random values");
+		logger.log(LogStatus.PASS, "Mandatory values entered");
 		util.takeSnapShot();
-
-		objTaskPage.setDataDate("12/15/2022");
-		logger.log(LogStatus.PASS, "Date Selected");
+		
+		WebElement element2 = driver.findElement(By.xpath("//strong[text()='GEOGRAPHICAL DETAILS']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element2);
+		Thread.sleep(2000);
+		
+		List<WebElement> uploadFiles = driver.findElements(By.xpath("//input[@type='file']"));
+		uploadFiles.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process.jpg");
+		uploadFiles.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process2.jpg");
+		Thread.sleep(2000);
+		inputFields.get(1).sendKeys("10000");
+		inputFields.get(2).sendKeys("38.8951");
+		inputFields.get(3).sendKeys("-89.7084");
+		Thread.sleep(2000);
+		textAreas.get(2).sendKeys("Random values");
+		textAreas.get(3).sendKeys("Random values");
 		util.takeSnapShot();
-
-		objTaskPage.clickSubmitBtn();
-
-		Thread.sleep(1000);
-
+		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFullScreenView()));
+		
+		//objTaskPage.clickSubmitBtn();
+		//Thread.sleep(2000);
+		//objTaskPage.clickYesBtn();
+		Thread.sleep(2000);
+		
+		//objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
 		util.takeSnapShot();
-		objTaskPage.clickYesBtn();
-
-		Thread.sleep(1000);
-		objTaskPage.clickSubmitBtn();
-		Thread.sleep(1000);
-		objTaskPage.clickYesBtn();
-		Thread.sleep(5000);
-		util.takeSnapShot();
-		objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
 
 		logger.log(LogStatus.PASS, "Completed Survey Form Request Successfully");
 
@@ -134,12 +157,15 @@ public class SurveyRequestForm extends BaseClass {
 		if (result.getStatus() == ITestResult.FAILURE) {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
-			screenshotPath = util.takeSnapShot();
+			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
-			screenshotPath = util.takeSnapShot();
+			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
+		}else if(result.getStatus() == ITestResult.SUCCESS) {
+			screenshotPath = util.captureFinalScreenshot();
+			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

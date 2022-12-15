@@ -45,7 +45,6 @@ public class TaskPageElements {
 
 	// Screening Form Elements
 
-
 	@FindBy(xpath = "//span[text()='Approval Type']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
 	WebElement approvalType;
 
@@ -63,13 +62,27 @@ public class TaskPageElements {
 
 	@FindBy(xpath = "//label[text()='NCEC Approval Required Date']/parent::div/following-sibling::div//input")
 	WebElement ncecApprovalRequiredDate;
-	
-	@FindBy(xpath="//label[text()='Name']/parent::div/following-sibling::div//input")
+
+	@FindBy(xpath = "//label[text()='Name']/parent::div/following-sibling::div//input")
 	WebElement activityName;
+
+	@FindBy(xpath = "//label[text()='Comment']/ancestor::div/following-sibling::div//textarea")
+	WebElement commentTextArea;
+
+	@FindBy(xpath = "//button[text()='Accept']")
+	WebElement approveAcceptBottomBtn;
+	
 
 	public TaskPageElements(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+	}
+
+	public void checkPageProgress(String strPageName, String strExpected) {
+		WebElement ele = driver
+				.findElement(By.xpath("//span[text()='" + strPageName + "']/following-sibling::span/span"));
+		String strCheck = ele.getText();
+		Assert.assertEquals(true, strCheck.equals(strExpected));
 	}
 
 	public void selectDepartment(String strDepartment) throws InterruptedException {
@@ -88,10 +101,21 @@ public class TaskPageElements {
 	}
 
 	public void clickAcceptBtn() throws InterruptedException {
-		if(approveAcceptBtn.isDisplayed()==true) {
-			Assert.assertEquals(true, approveAcceptBtn.isDisplayed());
+		if (driver.findElement(By.xpath("//button[text()='Accept']")).isDisplayed() == true) {
+			// Assert.assertEquals(true, approveAcceptBtn.isDisplayed());
 			approveAcceptBtn.click();
+			log.info("Clicked Accept Button");
+		} else {
+			log.info("Already clicked Accept Button");
 		}
+		Thread.sleep(2000);
+	}
+
+	public void clickAcceptBottomBtn() throws InterruptedException {
+		WebElement element = driver.findElement(By.xpath("//button[text()='Accept']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+		approveAcceptBottomBtn.click();
 		log.info("Clicked Accept Button");
 		Thread.sleep(2000);
 	}
@@ -140,52 +164,64 @@ public class TaskPageElements {
 	}
 
 	public void cancelBtn() {
-		Assert.assertEquals(true,approveCancelBtn.isDisplayed());
+		Assert.assertEquals(true, approveCancelBtn.isDisplayed());
 		approveCancelBtn.click();
 		log.info("Clicked cancel approval Button");
 	}
-	
-	//Screening Form page Methods
-	
+
+	// Screening Form page Methods
+
 	public void isCoastalCommitteeRequired(String strDecision) {
-		driver.findElement(By.xpath("//label[text()='"+strDecision+"']")).click();
-		log.info("Clicked "+strDecision+" button for coastal committee");
+		driver.findElement(By.xpath("//label[text()='" + strDecision + "']")).click();
+		log.info("Clicked " + strDecision + " button for coastal committee");
 	}
-	
+
 	public void setNcecDate(String strDate) {
 		ncecApprovalRequiredDate.sendKeys(strDate);
-		log.info("Set NCEC Required date to "+strDate);
+		log.info("Set NCEC Required date to " + strDate);
 	}
-	
-	public void selectValue(String strApprovalType, String strPhase, String strDetailedMasterPlan, String strConceptDesign, String strExecutionPlan) throws InterruptedException {
+
+	public void selectValue(String strApprovalType, String strPhase, String strDetailedMasterPlan,
+			String strConceptDesign, String strExecutionPlan) throws InterruptedException {
 		approvalType.click();
-		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strApprovalType + "']")).click();
-		log.info("Approval Type Selected= "+strApprovalType);
+		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strApprovalType + "']"))
+				.click();
+		log.info("Approval Type Selected= " + strApprovalType);
 		Thread.sleep(1000);
-		
+
 		phaseType.click();
 		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strPhase + "']")).click();
-		log.info("Phase Type Selected= "+strPhase);
+		log.info("Phase Type Selected= " + strPhase);
 		Thread.sleep(1000);
-		
+
 		detailedMasterPlanType.click();
-		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strDetailedMasterPlan + "']")).click();
-		log.info("Detailed MasterPlan Type Selected= "+strDetailedMasterPlan);
+		driver.findElement(
+				By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strDetailedMasterPlan + "']")).click();
+		log.info("Detailed MasterPlan Type Selected= " + strDetailedMasterPlan);
 		Thread.sleep(1000);
-		
+
 		conceptDesignType.click();
-		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strConceptDesign + "']")).click();
-		log.info("Concept Design Type Selected= "+strConceptDesign);
+		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strConceptDesign + "']"))
+				.click();
+		log.info("Concept Design Type Selected= " + strConceptDesign);
 		Thread.sleep(1000);
-		
+
 		executionPlanType.click();
-		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strExecutionPlan + "']")).click();
-		log.info("Execution Plan Type Selected= "+strExecutionPlan);
+		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strExecutionPlan + "']"))
+				.click();
+		log.info("Execution Plan Type Selected= " + strExecutionPlan);
 		Thread.sleep(1000);
 	}
-	
+
 	public void setActivityName(String strName) {
 		activityName.sendKeys(strName);
 	}
 
+	public void setCommentTextArea(String strComment) throws InterruptedException {
+		WebElement element = driver.findElement(By.xpath("//label[text()='Comment']/ancestor::div/following-sibling::div//textarea"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+
+		commentTextArea.sendKeys(strComment);
+	}
 }

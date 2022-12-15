@@ -25,7 +25,7 @@ public class RandomDataInput {
 	String[] sectorList = { "Food", "Energy", "Technology & Digital", "Water", "Waste", "Mobility", "Security",
 			"Environment", "Hospitality" };
 
-	String[] departmentListSurvey = { "Agriculture","Sector-43","Food", "Energy", "Technology & Digital", "Water", "Waste", "Mobility",
+	String[] departmentListSurvey = { "Food", "Energy", "Technology & Digital", "Water", "Waste", "Mobility",
 			"Security", "Environment", "Hospitality" };
 
 	String[] projectTopology = { "Urban District", "District Infrastructure", "Standard Asset*", "Railway/Highway",
