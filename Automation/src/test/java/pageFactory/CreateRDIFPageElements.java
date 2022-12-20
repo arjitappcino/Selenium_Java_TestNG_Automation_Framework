@@ -14,6 +14,7 @@ import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import random.RandomDataInput;
@@ -22,7 +23,7 @@ import utils.Utilities;
 public class CreateRDIFPageElements {
 	WebDriver driver;
 	Utilities util;
-	static Logger log = Logger.getLogger(CreateRDIFPageElements.class);
+	org.slf4j.Logger log = LoggerFactory.getLogger(CreateRDIFPageElements.class);
 	RandomDataInput randomInput;
 	String projectType;
 	WebDriverWait wait;
@@ -107,7 +108,7 @@ public class CreateRDIFPageElements {
 	@FindBy(xpath="//label[text()='Comments']/parent::div/following-sibling::div//textarea")
 	WebElement commentField;
 	
-	@FindBy(xpath="//label[text()='Scale, Complexity and Sensitivity']/parent::div/following-sibling::div//textarea")
+	@FindBy(xpath="//label[contains(text(),'Scale, Complexity and Sensitivity')]/parent::div/following::div//textarea")
 	WebElement textareaScaleSense;
 
 	// page 3 elements
@@ -118,7 +119,7 @@ public class CreateRDIFPageElements {
 	@FindBy(xpath = "//div[text()='Please Select Category']")
 	WebElement categoryTimeFrame;
 
-	@FindBy(xpath = "//div[text()='Please Select Deliverables']")
+	@FindBy(xpath = "//div[contains(text(),'Deliverables*')]")
 	WebElement deliverablesTimeFrame;
 
 	@FindBy(xpath = "//span[text()='Assessment Timeframes']/parent::div/following-sibling::div//input[@placeholder='mm/dd/yyyy']")
@@ -178,13 +179,13 @@ public class CreateRDIFPageElements {
 	}
 
 	public void setScopeDefinition(String strScope) throws Exception {
+		WebElement element = driver.findElement(By.xpath("//span[contains(text(),'Sustainability Development Team Key Contact')]/parent::div/following-sibling::div//td[2]//input"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+		
 		scopeDefinitionField.sendKeys(strScope);
 		log.info("Scope Definition Entered");
 		util.takeSnapShot();
-
-		WebElement element = driver.findElement(By.xpath("//label[text()='Scope Definition']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
-		Thread.sleep(2000);
 
 	}
 
@@ -240,7 +241,10 @@ public class CreateRDIFPageElements {
 		log.info("Related Development Filled.");
 	}
 
-	public void setInsertFigure() {
+	public void setInsertFigure() throws InterruptedException {
+		WebElement element1 = driver.findElement(By.xpath("//label[text()='Scope Definition']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
+		Thread.sleep(2000);
 		insertFigure.sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\user.xlsx");
 	}
 
@@ -324,7 +328,7 @@ public class CreateRDIFPageElements {
 	}
 	
 	public void setScaleSensitivity(String strText) throws InterruptedException {
-		WebElement element = driver.findElement(By.xpath("//label[text()='Scale, Complexity and Sensitivity']"));
+		WebElement element = driver.findElement(By.xpath("//label[text()='Resort Complex']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
 		textareaScaleSense.sendKeys(strText);
@@ -350,14 +354,14 @@ public class CreateRDIFPageElements {
 		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strCategory + "']")).click();
 
 		if (strCategory != "Below Assessment Category") {
-			
-			 Thread.sleep(2000);
-			 deliverablesTimeFrame.click();
-			 driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='"
-			 + strDeliverables + "']")).click();
-
+//			
+//			 Thread.sleep(2000);
+//			 deliverablesTimeFrame.click();
+//			 driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='"
+//			 + strDeliverables + "']")).click();
+//
 			dateApproval.sendKeys(strDate);
-
+//
 		}
 
 		commentFieldTimeFrame.sendKeys(strComment);

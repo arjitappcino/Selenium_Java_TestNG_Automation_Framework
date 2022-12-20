@@ -1,11 +1,11 @@
 package pageFactory;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import utils.Utilities;
@@ -13,7 +13,7 @@ import utils.Utilities;
 public class SuccessPageElements {
 
 	WebDriver driver;
-	static Logger log = Logger.getLogger(LoginPageElements.class);
+	org.slf4j.Logger log = LoggerFactory.getLogger(SuccessPageElements.class);
 	Utilities util;
 
 	@FindBy(xpath = "//strong[text()='HOME']")

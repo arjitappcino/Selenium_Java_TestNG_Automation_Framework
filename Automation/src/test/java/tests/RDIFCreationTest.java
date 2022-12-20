@@ -61,7 +61,7 @@ public class RDIFCreationTest extends BaseClass {
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		// char250=properties.getProperty("character250");
 		// char4k=properties.getProperty("character4000");
-		
+		System.out.println("project name going in beforetest "+projectName);
 		String screenshotPath = ".\\screenshots\\" + projectName;
 		File theDir = new File(screenshotPath);
 		if (!theDir.exists()) {
@@ -80,7 +80,7 @@ public class RDIFCreationTest extends BaseClass {
 		je = (JavascriptExecutor) driver;
 		action = new Actions(driver);
 		
-		FileInputStream in = new FileInputStream(util.getPropertyFileLocation());
+		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
 		properties.load(in);
 		in.close();
@@ -89,11 +89,13 @@ public class RDIFCreationTest extends BaseClass {
 	@Test
 	public void createProjectRDIF() throws Exception {
 		extent = getExtent();
-		devTitle = getProjectName();
+		devTitle = projectName;
 		logger = extent.startTest("Create RDIF Project: "+devTitle);
+		
+		System.out.println("Creating New Project: "+devTitle);
 
 		// Login Proponent
-		driver.get(properties.getProperty("url_proponent"));
+		driver.get(properties.getProperty("url_original_proponent"));
 		String userName = properties.getProperty("proponentUser");
 		String password = properties.getProperty("password");
 		objLogin.login(userName, password);
@@ -110,43 +112,39 @@ public class RDIFCreationTest extends BaseClass {
 		
 		String setRegion = randomInput.getRandomRegion();
 		objRDIF.selectRegion(setRegion);
-		logger.log(LogStatus.PASS,"Region selected: "+setRegion);
 		
 		String setSector =  randomInput.getRandomSector();
 		objRDIF.selectSector(setSector);
-		logger.log(LogStatus.PASS,"Sector Selected: "+setSector);
 		
 		objRDIF.setDevTitle(devTitle);
-		logger.log(LogStatus.PASS,"Development Title set: "+devTitle);
 		
 		objRDIF.addPropKeyContactDetails("p1", "p1@abc.com");
 		objRDIF.addSusDevContactDetails("s1", "s1@abc.com");
-		logger.log(LogStatus.PASS,"Proponent Key and Sus Dev Contact filled");
+		
+		logger.log(LogStatus.PASS,"Region selected: "+setRegion + " | Sector Selected: "+setSector +" | Development Title set: "+devTitle + logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objRDIF.setScopeDefinition("some random text");
-		logger.log(LogStatus.PASS,"Scope Definition set");
+		
+		logger.log(LogStatus.PASS, "Scope Definition set"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objRDIF.setInsertFigure();
 		util.takeSnapShot();
 		Thread.sleep(1000);
-		logger.log(LogStatus.PASS,"Image uploaded");
+		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objRDIF.setParagraphQuantityFields("some random text");
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS,"Paragraph fields set");
+		logger.log(LogStatus.PASS,"Paragraph fields set" +logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objRDIF.selectKeyDates();
-		logger.log(LogStatus.PASS,"Dates selected");
 		
 		objRDIF.setRelatedDevelopment("some random text");
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS,"Related Development set");
+		logger.log(LogStatus.PASS, "Dates selected" +logger.addScreenCapture(util.captureFinalScreenshot())+"Page 1 Filled");
 
 		objRDIF.clickNextBtn();
 		Thread.sleep(3000);
-		logger.log(LogStatus.PASS,"Clicked Next Button");
-	
-		logger.log(LogStatus.PASS, "Page 1 Filled");
 		
 		objTaskPage.checkPageProgress("Development Details","Completed");
 		objTaskPage.checkPageProgress("Development Context & Categorization","In-Progress");
@@ -157,27 +155,24 @@ public class RDIFCreationTest extends BaseClass {
 		//String projectTypeRandom = randomInput.getRandomProjectType();
 		//objRDIF.setProjectType(projectTypeRandom);
 		objRDIF.setProjectType("Project");
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 
 		starEntry = objRDIF.setProjectTypology();
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		Thread.sleep(2000);
 		
-		if(starEntry==true) {
-			objRDIF.setScaleSensitivity("Random text");
-		}
-	
-		Thread.sleep(1000);
+		objRDIF.setScaleSensitivity("Random text");
 		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot())+"Page 2 Filled");
+		Thread.sleep(1000);
+
 		objRDIF.clickSubmit();
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Page 2 Filled");
-
 		// Validate RDIF created
 		objSuccessPage.validateRDIFCreationCompleted(devTitle);
-
-		logger.log(LogStatus.PASS, "RDIF Submitted = " + devTitle);
 
 	}
 	
@@ -195,7 +190,7 @@ public class RDIFCreationTest extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "RDIF Submitted = " +devTitle+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

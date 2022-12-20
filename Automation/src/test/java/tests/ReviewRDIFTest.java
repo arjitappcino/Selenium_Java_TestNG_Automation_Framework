@@ -4,11 +4,10 @@ import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -25,7 +24,7 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
+public class ReviewRDIFTest extends BaseClass {
 
 	BaseClass bs;
 	Properties properties;
@@ -39,12 +38,12 @@ public class FinalTestConfirmation extends BaseClass {
 	Actions action;
 	JavascriptExecutor je;
 	ExtentTest logger;
-	RDIFCreationTest rc = new RDIFCreationTest();
-	WebDriverWait wait;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
-		
+		// char250=properties.getProperty("character250");
+		// char4k=properties.getProperty("character4000");
+
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -65,14 +64,16 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskReviewRDIF() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
-		
+		String taskName = properties.getProperty("TASK_RDIF_REVIEW_ATR");
+		logger = extent.startTest(taskName);
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
+		String devTitle = projectName;
 		
+		System.out.println("Starting Task: "+taskName);
+
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
@@ -80,23 +81,76 @@ public class FinalTestConfirmation extends BaseClass {
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
 		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
-		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
+
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
 		util.takeSnapShot();
-		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
+
+		logger.log(LogStatus.PASS, "Task Page: " + taskName);
+
+		objTaskPage.clickAcceptBtn();
+
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		util.takeSnapShot();
 		Thread.sleep(2000);
-		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		objTaskPage.checkPageProgress("Development Details","Completed");
+		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
+		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		
+		//objRDIF.setCommentReviewRdif("Comments by ATR");
+		logger.log(LogStatus.PASS, "Development Details Page "+logger.addScreenCapture(util.captureFullScreenView()));
+		objTaskPage.clickNextBtn();
+		
+		objTaskPage.checkPageProgress("Development Details","Completed");
+		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
+		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		
+		//objRDIF.setCommentReviewRdif("Comments by ATR");
+		logger.log(LogStatus.PASS, "Development Context & Categorization Page "+logger.addScreenCapture(util.captureFullScreenView()));
+		objTaskPage.clickNextBtn();
+
+		// page 3 - Environmental Assessment & Approvals
+
+		//String cat = properties.getProperty("category");
+
+		objRDIF.setAssignmentTimeframe("PAA name", category, "Scoping, ENVID, ESIA Category III and ESMP Report", "01/15/2023", "Comments added");
+		util.takeSnapShot();
+
+		objRDIF.setUpload();
+		util.takeSnapShot();
+
+		objRDIF.setRemainTextArea();
+		Thread.sleep(2000);
+		
+		objRDIF.setCommentReviewRdif("Comments by ATR");
+		logger.log(LogStatus.PASS, "Comments entered");
+		
+		logger.log(LogStatus.PASS, "Environmental Assessment & Approvals Page "+logger.addScreenCapture(util.captureFullScreenView()));
+		Thread.sleep(2000);
+		objTaskPage.clickAcceptBottomBtn();
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		util.takeSnapShot();
+		Thread.sleep(4000);
+		util.takeSnapShot();
+		objSuccessPage.validateReviewRDIFTaskCompleted(devTitle);
+		util.takeSnapShot();
+
+		logger.log(LogStatus.PASS, "Completed Review RDIF by ATR Successfully");
 
 	}
-	
 
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
@@ -110,7 +164,7 @@ public class FinalTestConfirmation extends BaseClass {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
-		}else if(result.getStatus() == ITestResult.SUCCESS) {
+		} else if (result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
 		}

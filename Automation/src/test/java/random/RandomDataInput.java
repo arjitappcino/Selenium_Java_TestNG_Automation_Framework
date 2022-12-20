@@ -28,14 +28,14 @@ public class RandomDataInput {
 	String[] departmentListSurvey = { "Food", "Energy", "Technology & Digital", "Water", "Waste", "Mobility",
 			"Security", "Environment", "Hospitality" };
 
-	String[] projectTopology = { "Urban District", "District Infrastructure", "Standard Asset*", "Railway/Highway",
-			"Desalination/Wastewater Treatment*", "Transmitter towers*", "Island Development",
-			"Agriculture/Horticulture*", "Construction Support Network", "Metallurgy/Refinery", "Temporary Laydown*",
-			"Iconic/Signature Asset", "Residential Complex*", "Public Art Installation", "Power Plant*",
-			"Roads and Pathways*", "Regional Activation Program", "Resort Complex*", "Bulk Food Production/Storage*",
-			"Resource Extraction*", "Petrochemical Facility", "Industrial Complex*", "Public Realm Assets",
-			"Biotech/Medical/Pharmaceutical Facility*", "Regional Technology Network", "Port/Marina", "Data Centre",
-			"Entertainment Complex", "Aquaculture Project*", "Single Event*", "Other" };
+	String[] projectTopology = { "Urban District", "District Infrastructure", "Standard Asset", "Railway/Highway",
+			"Desalination/Wastewater Treatment", "Transmitter towers", "Island Development",
+			"Agriculture/Horticulture", "Construction Support Network", "Metallurgy/Refinery", "Temporary Laydown",
+			"Iconic/Signature Asset", "Residential Complex", "Public Art Installation", "Power Plant",
+			"Roads and Pathways", "Regional Activation Program", "Resort Complex", "Bulk Food Production/Storage",
+			"Resource Extraction", "Petrochemical Facility", "Industrial Complex", "Public Realm Assets",
+			"Biotech/Medical/Pharmaceutical Facility", "Regional Technology Network", "Port/Marina", "Data Centre",
+			"Entertainment Complex", "Aquaculture Project", "Single Event", "Other" };
 
 	String[] projectTypes = { "MasterPlan Project", "Asset" };
 

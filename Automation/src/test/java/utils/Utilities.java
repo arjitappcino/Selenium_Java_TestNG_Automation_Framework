@@ -1,12 +1,14 @@
 package utils;
 
-import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.Instant;
@@ -18,8 +20,6 @@ import java.util.Properties;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.codec.binary.Base64OutputStream;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -33,40 +33,49 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
+import tests.BaseClass;
 
 public class Utilities{
-
 	WebDriver driver;
 	TakesScreenshot scrShot;
 	static TakesScreenshot finalScrShot;
-	Properties properties;
 
 	public Utilities(WebDriver driver) {
 		this.driver = driver;
 	}
-
+	
 	public String takeSnapShot() throws Exception {
 		
-		FileInputStream in = new FileInputStream(getPropertyFileLocation());
-		properties = new Properties();
+		FileInputStream in = new FileInputStream(getProjectPropertyLocation());
+		Properties properties = new Properties();
 		properties.load(in);
 		in.close();
+		
+//		FileInputStream out = new FileInputStream(getProjectPropertyLocation());
+//		Properties propertiesOut = new Properties();
+//		propertiesOut.load(out);
+		//out.close();
 
 		Timestamp instant = Timestamp.from(Instant.now());
 		String instantTime = instant.toString().replace(":", "-");
 		String projectName = properties.getProperty("currentProject");
+		//System.out.println("utility project naem: "+projectName);
 		String filePath = System.getProperty("user.dir")+"/screenshots/"+projectName;
+	
+		File theDir = new File(filePath);
+		if (!theDir.exists()) {
+			theDir.mkdirs();
+		}
 		
-		System.out.println(filePath);
+		
 		scrShot = ((TakesScreenshot) driver);
-		File SrcFile = scrShot.getScreenshotAs(OutputType.FILE);
-
-		String scrShotname = "/" + instantTime + ".png";
-		String destination = filePath + scrShotname;
-		File DestFile = new File(destination);
-
-		FileUtils.copyFile(SrcFile, DestFile);
-		return destination;
+		String SrcFile = scrShot.getScreenshotAs(OutputType.BASE64);
+		String scrShotname = "/"+instantTime + ".png";
+		//File DestFile = new File(destination);
+		byte dearr[] = Base64.getDecoder().decode(SrcFile);
+		Path destinationFile = Paths.get(filePath, scrShotname);
+		Files.write(destinationFile, dearr);
+		return scrShotname;
 		
 
 	}
@@ -93,8 +102,14 @@ public class Utilities{
 	}
 
 	public WebElement fetchTask(String taskName, String projectName) {
-		WebElement taskFetch = driver.findElement(By.xpath(
-				"//a[text()='" + projectName + "']/ancestor::td/parent::tr/td[2]//a[text()='" + taskName + "']"));
+		WebElement taskFetch = null;
+		if(taskName.contains("Develop and submit Cat")) {
+			taskFetch = driver.findElement(By.xpath(
+					"//a[text()='" + projectName + "']/ancestor::td/parent::tr/td[2]//a[contains(text(),'Develop and submit Cat')]"));
+		}else {
+			taskFetch = driver.findElement(By.xpath(
+					"//a[text()='" + projectName + "']/ancestor::td/parent::tr/td[2]//a[text()='" + taskName + "']"));
+		}
 		return taskFetch;
 
 	}
@@ -110,8 +125,12 @@ public class Utilities{
 		}
 	}
 	
-	public String getPropertyFileLocation() {
+	public String getConfigPropertyLocation() {
 		return ".\\src\\test\\java\\config.properties";
+	}
+	
+	public String getProjectPropertyLocation() {
+		return ".\\src\\test\\java\\project.properties";
 	}
 	
 	public String captureFullScreenView() throws IOException {

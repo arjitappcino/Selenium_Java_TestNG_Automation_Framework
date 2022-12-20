@@ -3,11 +3,13 @@ package tests;
 import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -25,7 +27,7 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
+public class SignScreeningFormTest extends BaseClass {
 
 	BaseClass bs;
 	Properties properties;
@@ -44,7 +46,7 @@ public class FinalTestConfirmation extends BaseClass {
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
-		
+
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -56,6 +58,7 @@ public class FinalTestConfirmation extends BaseClass {
 		randomInput = new RandomDataInput(driver);
 		je = (JavascriptExecutor) driver;
 		action = new Actions(driver);
+		wait = new WebDriverWait(driver, waitDuration);
 
 		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
@@ -65,38 +68,99 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskSignScreeningFormATSM() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
-		
+		String taskName = properties.getProperty("TASK_SIGN_SCREEN_ATSM");
+		logger = extent.startTest(taskName);
+		String userName;
+
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
-		
+		System.out.println("Starting Task: "+taskName);
+		String devTitle = projectName;
+
 		logger.log(LogStatus.PASS, "URL HIT");
-		String userName = properties.getProperty("assRepUser");
+		System.out.println("signee : "+signBy);
+		if (signBy.contains("Executive")) {
+			userName = properties.getProperty("assExDirector");
+		} else {
+			userName = properties.getProperty("assDirector");
+		}
+
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
+		logger.log(LogStatus.PASS, "Login Successful "+userName);
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
+		Thread.sleep(2000);
+
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
 		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
+
+		logger.log(LogStatus.PASS, "Task Page: " + taskName);
+
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(1000);
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		util.takeSnapShot();
+
+		WebElement element = driver.findElement(By.xpath("//strong[text()='SIMILAR ACTIVITIES']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
 		util.takeSnapShot();
-		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
+
+		WebElement element1 = driver.findElement(By.xpath("//div[text()='Comments Added']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
 		Thread.sleep(2000);
 		util.takeSnapShot();
-		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+
+		objTaskPage.clickAcceptBottomBtn();
+		Thread.sleep(4000);
+		util.takeSnapShot();
+
+		Thread.sleep(130000);
+
+		WebElement iframe = driver.findElement(By.xpath("//iframe[@aria-label='DocuSign']"));
+		Thread.sleep(2000);
+		driver.switchTo().frame(iframe);
+
+		Thread.sleep(2000);
+		driver.findElement(By.xpath("//button[text()='Continue']")).click();
+		Thread.sleep(1000);
+		util.takeSnapShot();
+		driver.findElement(By.xpath("//button[@data-qa='SignHere']//span")).click();
+		List<WebElement> pageTabs = driver.findElements(By.xpath("//div[@class='page-tabs']"));
+
+		pageTabs.get(0).click();
+		Thread.sleep(1000);
+		util.takeSnapShot();
+
+		driver.findElement(By.xpath("//button[text()=' Finish ']")).click();
+		Thread.sleep(10000);
+		util.takeSnapShot();
+
+		driver.switchTo().defaultContent();
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//button[text()='Submit']")).click();
+		Thread.sleep(4000);
+		util.takeSnapShot();
+
+		objSuccessPage.validateSignScreeningFormTaskCompleted(devTitle);
+		logger.log(LogStatus.PASS, "Completed Sign Screening Form by "+userName+" Successfully");
 
 	}
-	
 
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
@@ -106,13 +170,15 @@ public class FinalTestConfirmation extends BaseClass {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			System.out.println("FAILED: Test Sign Screening Form failed.");
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
-		}else if(result.getStatus() == ITestResult.SUCCESS) {
+		} else if (result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			System.out.println("PASSED: Test Sign Screening Form passed.");
 		}
 		driver.quit();
 	}

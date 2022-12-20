@@ -4,11 +4,10 @@ import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -25,8 +24,8 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
-
+public class ReviewAssessmentDeliverablesTest extends BaseClass{
+	
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -39,9 +38,8 @@ public class FinalTestConfirmation extends BaseClass {
 	Actions action;
 	JavascriptExecutor je;
 	ExtentTest logger;
-	RDIFCreationTest rc = new RDIFCreationTest();
-	WebDriverWait wait;
-
+	RDIFCreationTest rc = new RDIFCreationTest();;
+	
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		
@@ -65,39 +63,64 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskReviewAssessmentDeliverablesATM() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
+		String taskName = properties.getProperty("TASK_REVIEW_ASSESSMENT_DELIVERABLES_ATM");
+		logger = extent.startTest(taskName);
 		
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
+		System.out.println("Starting Task: "+taskName);
 		
+		Thread.sleep(10000);
+		String devTitle = projectName;
+
 		logger.log(LogStatus.PASS, "URL HIT");
-		String userName = properties.getProperty("assRepUser");
+		String userName = properties.getProperty("assTeamMgr");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
+		logger.log(LogStatus.PASS, "Login Successful ATM");
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
-		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
+
+		System.out.println(devTitle);
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
+		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
+
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(1000);
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
 		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
-		Thread.sleep(2000);
+		
+		objTaskPage.setCommentTextArea("Comments by ATM");
 		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		objTaskPage.clickAcceptBottomBtn();
+		Thread.sleep(4000);
+		util.takeSnapShot();
+		
+		objSuccessPage.validateReviewAssessmentDeliverablesTaskCompleted(devTitle);
+		logger.log(LogStatus.PASS, "Completed Review Assessment Deliverables by ATM Successfully");
 
 	}
 	
-
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
 		String screenshotPath;
@@ -106,6 +129,7 @@ public class FinalTestConfirmation extends BaseClass {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			System.out.println("Test FAILED: Review Assessment Deliverables by ATM");
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
@@ -113,6 +137,7 @@ public class FinalTestConfirmation extends BaseClass {
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			System.out.println("Test PASSED: Review Assessment Deliverables by ATM");
 		}
 		driver.quit();
 	}

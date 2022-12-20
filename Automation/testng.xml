@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Suite">
+	<test name="RDIF Creation">
+		<classes>
+			<class name="tests.RDIFCreationTest" />
+		</classes>
+	</test>
+
+	<test name="Review RDIF">
+		<classes>
+			<class name="tests.ReviewRDIF" />
+		</classes>
+	</test>
+	
+	<test name="SRF">
+		<classes>
+			<class name="tests.SurveyRequestForm" />
+		</classes>
+	</test>
+	
+	<!--<test name="Fill Screening Form">
+		<classes>
+			<class name="tests.SubmitScreeningForm" />
+		</classes>
+	</test>
+	
+	<test name="Review Screening Form">
+		<classes>
+			<class name="tests.ReviewScreeningFormByATM" />
+		</classes>
+	</test>
+	
+	<test name="Accept Screening Form">
+		<classes>
+			<class name="tests.AcceptScreeningFormByATSM" />
+		</classes>
+	</test>
+	
+	<test name="Sign Screening Form">
+		<classes>
+			<class name="tests.SignScreeningForm" />
+		</classes>
+	</test>
+	
+	<test name="Submit Screening Form to NCEC">
+		<classes>
+			<class name="tests.NcecSubmitScreeningForm" />
+		</classes>
+	</test>
+	
+	<test name="Submit Scoping Form">
+		<classes>
+			<class name="tests.SubmitScopingReport" />
+		</classes>
+	</test>
+	
+	<test name="Review Scoping Report">
+		<classes>
+			<class name="tests.ReviewScopingReport" />
+		</classes>
+	</test>
+	
+	<test name="Accept Scoping Report">
+		<classes>
+			<class name="tests.AcceptScopingReport" />
+		</classes>
+	</test>
+	
+	<test name="Upload Scoping Report to NCEC">
+		<classes>
+			<class name="tests.NcecSubmitScopingReport" />
+		</classes>
+	</test>
+	
+	<test name="Upload Assessment Deliverables">
+		<classes>
+			<class name="tests.UploadAssessmentDeliverables" />
+		</classes>
+	</test>
+	
+	<test name="Review Assessment Deliverables">
+		<classes>
+			<class name="tests.ReviewAssessmentDeliverables" />
+		</classes>
+	</test>
+		
+	<test name="Accept Assessment Deliverables">
+		<classes>
+			<class name="tests.AcceptAssessmentDeliverables" />
+		</classes>
+	</test>
+	
+	<test name="NCEC Upload Assessment Deliverables">
+		<classes>
+			<class name="tests.NcecUploadAssessmentDeliverables" />
+		</classes>
+	</test>-->
+	
+</suite> 

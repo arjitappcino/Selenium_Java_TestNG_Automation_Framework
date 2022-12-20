@@ -4,10 +4,11 @@ import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
@@ -25,8 +26,8 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
-
+public class SubmitScopingReportTest extends BaseClass{
+	
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -41,7 +42,7 @@ public class FinalTestConfirmation extends BaseClass {
 	ExtentTest logger;
 	RDIFCreationTest rc = new RDIFCreationTest();
 	WebDriverWait wait;
-
+	
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		
@@ -56,6 +57,7 @@ public class FinalTestConfirmation extends BaseClass {
 		randomInput = new RandomDataInput(driver);
 		je = (JavascriptExecutor) driver;
 		action = new Actions(driver);
+		wait = new WebDriverWait(driver,waitDuration);
 
 		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
@@ -65,39 +67,63 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskSubmitScopingReport() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
+		String taskName = properties.getProperty("TASK_SUBMIT_SCOPING_REPORT_ATR");
+		logger = extent.startTest(taskName);
 		
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
-		
+		String devTitle = projectName;
+
 		logger.log(LogStatus.PASS, "URL HIT");
+		System.out.println("Starting Task: "+taskName);
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
 		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
+		Thread.sleep(2000);
+
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
 		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(1000);
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		util.takeSnapShot();
+		
+		
+		driver.findElement(By.xpath("//label[text()='Title']/parent::div/following-sibling::div//input")).sendKeys("Dummy Title");
+		String strPath = currentDirectory+"\\scoping_sample.pdf";
+		driver.findElement(By.xpath("//span[contains(text(),'Upload')]/parent::div/following-sibling::div//input")).sendKeys(strPath);
+		
 		Thread.sleep(2000);
 		util.takeSnapShot();
 		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
-		Thread.sleep(2000);
+		objTaskPage.clickSubmitBtn();
+		Thread.sleep(4000);
 		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		objSuccessPage.validateUploadScopingReportTaskCompleted(devTitle);
+		logger.log(LogStatus.PASS, "Completed Upload Scoping Report Task by ATR Successfully");
 
 	}
 	
-
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
 		String screenshotPath;

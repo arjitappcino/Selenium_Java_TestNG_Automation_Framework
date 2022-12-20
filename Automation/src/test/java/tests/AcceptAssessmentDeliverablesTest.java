@@ -4,11 +4,10 @@ import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
-import org.openqa.selenium.By;
+
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -25,8 +24,8 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
-
+public class AcceptAssessmentDeliverablesTest extends BaseClass{
+	
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -39,9 +38,8 @@ public class FinalTestConfirmation extends BaseClass {
 	Actions action;
 	JavascriptExecutor je;
 	ExtentTest logger;
-	RDIFCreationTest rc = new RDIFCreationTest();
-	WebDriverWait wait;
-
+	RDIFCreationTest rc = new RDIFCreationTest();;
+	
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
 		
@@ -65,39 +63,60 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskAcceptAssessmentDeliverablesATSM() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
+		String taskName = properties.getProperty("TASK_ACCEPT_ASSESSMENT_DELIVERABLES_ATSM");
+		logger = extent.startTest(taskName);
 		
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
-		
+		String devTitle = projectName;
+
 		logger.log(LogStatus.PASS, "URL HIT");
-		String userName = properties.getProperty("assRepUser");
+		System.out.println("Starting Task: "+taskName);
+		String userName = properties.getProperty("assTeamSnrMgr");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
+		logger.log(LogStatus.PASS, "Login Successful ATSM");
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
-		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
+		
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
+		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
+
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(1000);
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
 		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
-		Thread.sleep(2000);
+		
+		objTaskPage.setCommentTextArea("Comments by ATSM");
+		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		objTaskPage.clickAcceptBottomBtn();
+		Thread.sleep(4000);
 		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		objSuccessPage.validateAcceptAssessmentDeliverablesTaskCompleted(devTitle);
+		logger.log(LogStatus.PASS, "Completed Accept Assessment Deliverables by ATSM Successfully");
 
 	}
 	
-
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
 		String screenshotPath;

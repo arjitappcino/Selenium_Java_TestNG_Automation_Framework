@@ -17,7 +17,7 @@ public class HomePageElements {
 	WebDriver driver;
 	Logger log = Logger.getLogger(HomePageElements.class);
 	WebDriverWait wait;
-	Duration waitDuration = Duration.ofSeconds(60);
+	Duration waitDuration = Duration.ofSeconds(120);
 	
 	@FindBy(xpath="//strong[text()='PROJECT']")
 	WebElement createProjectBtn;

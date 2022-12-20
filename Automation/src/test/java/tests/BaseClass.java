@@ -27,14 +27,19 @@ import com.relevantcodes.extentreports.ExtentTest;
 import utils.Utilities;
 
 public class BaseClass {
-	WebDriver driver;
+	public WebDriver driver;
 	ExtentTest logger;
 	File screenshotFolder = new File(".\\screenshots");
-	static ExtentReports extent;
+	static public ExtentReports extent;
 	static String alpha = RandomStringUtils.randomAlphabetic(4).toUpperCase();
 	static String numeric = RandomStringUtils.randomNumeric(4);
-	//public static String projectName = "ATMN ID " +alpha+ numeric;
-	public static String projectName = "ATMN ID IJXS4332";
+	// public static String projectName = "ATMN ID " +alpha+ numeric;
+	// public static String projectName = "ATMN ID IJXS4332";
+	static String getProject = System.getProperty("projectName");
+	static public String category = System.getProperty("category");
+	static public String signBy = System.getProperty("SignBy");
+	static public String projectName = setProjectName(getProject);
+
 	Utilities util = new Utilities(driver);
 	Properties properties;
 	String currentDirectory = System.getProperty("user.dir");
@@ -44,19 +49,21 @@ public class BaseClass {
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
-		//FileUtils.cleanDirectory(screenshotFolder);
-		FileInputStream in = new FileInputStream(util.getPropertyFileLocation());
+		// FileUtils.cleanDirectory(screenshotFolder);
+		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
 		properties.load(in);
 		in.close();
 
-		FileOutputStream out = new FileOutputStream(util.getPropertyFileLocation());
+		FileInputStream fis = new FileInputStream(util.getProjectPropertyLocation());
+		properties.load(fis);
+		System.out.println("project name in base class: "+projectName);
 		properties.setProperty("currentProject", projectName);
-		properties.store(out, null);
-		out.close();
-
-		String path = ".\\screenshots\\" + projectName + "\\report.html";
-		System.out.println(path);
+		FileOutputStream fos = new FileOutputStream(util.getProjectPropertyLocation());
+		properties.store(fos, null);
+		
+		// String path = ".\\screenshots\\" + projectName + "\\report.html";
+		String path = ".\\screenshots\\report.html";
 		extent = new ExtentReports(path, true);
 		extent.loadConfig(new File(".\\extent-config.xml"));
 		DOMConfigurator.configure("log4j.xml");
@@ -67,16 +74,16 @@ public class BaseClass {
 	public void setUp() throws AWTException, InterruptedException {
 		startSeleniumSession();
 		Thread.sleep(5000);
-		
+
 	}
 
 	@SuppressWarnings("deprecation")
 	public void startSeleniumSession() throws AWTException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
 		ChromeOptions capability = new ChromeOptions();
-		//capability.addArguments("--window-size=1600,600");
-		//capability.addArguments("--start-maximized");
-		//capability.addArguments("--headless");
+		capability.addArguments("--window-size=1600,600");
+		// capability.addArguments("--start-maximized");
+		capability.addArguments("--headless");
 		capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 		driver = new ChromeDriver(capability);
@@ -86,11 +93,9 @@ public class BaseClass {
 		robot = new Robot();
 		robot.keyPress(KeyEvent.VK_CONTROL);
 		robot.keyPress(KeyEvent.VK_SUBTRACT);
-		robot.keyRelease(KeyEvent.VK_SUBTRACT);
-		robot.keyRelease(KeyEvent.VK_CONTROL);
 		Thread.sleep(1000);
 
-		System.out.println(currentDirectory);
+		// System.out.println(currentDirectory);
 	}
 
 	public WebDriver getDriver() {
@@ -102,9 +107,18 @@ public class BaseClass {
 	}
 
 	public String getProjectName() {
+		projectName = setProjectName(getProject);
 		return projectName;
 	}
-	
+
+	public static String setProjectName(String strProject) {
+		if (strProject.contains("random") == true) {
+			return "ATMN ID " + alpha + numeric;
+		} else {
+			return System.getProperty("projectName");
+		}
+	}
+
 	@AfterSuite
 	public void afterSuite() {
 		extent.flush();

@@ -1,14 +1,18 @@
 package tests;
 
 import java.awt.AWTException;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
+import javax.imageio.ImageIO;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -23,10 +27,13 @@ import pageFactory.LoginPageElements;
 import pageFactory.SuccessPageElements;
 import pageFactory.TaskPageElements;
 import random.RandomDataInput;
+import ru.yandex.qatools.ashot.AShot;
+import ru.yandex.qatools.ashot.Screenshot;
+import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
-
+public class SurveyRequestFormTest extends BaseClass {
+	
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -39,12 +46,12 @@ public class FinalTestConfirmation extends BaseClass {
 	Actions action;
 	JavascriptExecutor je;
 	ExtentTest logger;
-	RDIFCreationTest rc = new RDIFCreationTest();
-	WebDriverWait wait;
+	String taskName;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
-		
+		// char250=properties.getProperty("character250");
+		// char4k=properties.getProperty("character4000");
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -65,38 +72,81 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskSurveyRequest() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
-		
-		// String devTitle = "NEOM ATMN ID 2239";
+		String devTitle = projectName;
+		String taskName = properties.getProperty("TASK_SURVEY_REQUEST_ATR");
+		logger = extent.startTest(taskName);
+		// devTitle = "NEOM ATMN ID 5765";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
-		
+
 		logger.log(LogStatus.PASS, "URL HIT");
+		System.out.println("Starting Task: "+taskName);
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
-		logger.log(LogStatus.PASS, "Login Successful ATR");
+		logger.log(LogStatus.PASS, "Login Successful ATR: "+devTitle);
+
+		objHome.clickTaskBtn();
+		Thread.sleep(2000);
+		
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
 		Thread.sleep(7000);
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
-		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
-		Thread.sleep(2000);
-		util.takeSnapShot();
-		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
-		Thread.sleep(2000);
+		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
+		task.click();
+		Thread.sleep(5000);
 		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(2000);
+
+		objTaskPage.selectDepartment(randomInput.getRandomDepartment());
+		util.takeSnapShot();
+
+		List<WebElement> inputFields = driver.findElements(By.xpath("//input[@type='text']"));
+		inputFields.get(0).sendKeys("12/31/2022");
+		
+		List<WebElement> textAreas = driver.findElements(By.xpath("//textarea"));
+		textAreas.get(0).sendKeys("Random values");
+		textAreas.get(1).sendKeys("Random values");
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		util.takeSnapShot();
+		
+		WebElement element2 = driver.findElement(By.xpath("//strong[text()='GEOGRAPHICAL DETAILS']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element2);
+		Thread.sleep(2000);
+		
+		List<WebElement> uploadFiles = driver.findElements(By.xpath("//input[@type='file']"));
+		uploadFiles.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process.jpg");
+		uploadFiles.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process2.jpg");
+		Thread.sleep(2000);
+		inputFields.get(1).sendKeys("10000");
+		inputFields.get(2).sendKeys("38.8951");
+		inputFields.get(3).sendKeys("-89.7084");
+		Thread.sleep(2000);
+		textAreas.get(2).sendKeys("Random values");
+		textAreas.get(3).sendKeys("Random values");
+		util.takeSnapShot();
+		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
+		objTaskPage.clickSubmitBtn();
+		Thread.sleep(2000);
+		objTaskPage.clickYesBtn();
+		Thread.sleep(2000);
+		
+		objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
+		util.takeSnapShot();
 
 	}
-	
 
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
@@ -112,7 +162,8 @@ public class FinalTestConfirmation extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			System.out.println("Completed Task: "+taskName);
+			logger.log(LogStatus.PASS, "Completed Survey Form Request Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

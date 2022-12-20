@@ -6,13 +6,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.slf4j.LoggerFactory;
+
 import utils.Utilities;
 
 public class LoginPageElements {
 	
 	WebDriver driver;
 	Utilities util;
-	Logger log = Logger.getLogger(LoginPageElements.class);
+	org.slf4j.Logger log = LoggerFactory.getLogger(LoginPageElements.class);
 	
 	@FindBy(id="un")
 	WebElement usernameField;

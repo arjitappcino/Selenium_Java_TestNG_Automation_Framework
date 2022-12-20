@@ -1,5 +1,7 @@
 package pageFactory;
 
+import java.time.Duration;
+
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -7,11 +9,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 public class TaskPageElements {
 	WebDriver driver;
-	Logger log = Logger.getLogger(HomePageElements.class);
+	org.slf4j.Logger log = LoggerFactory.getLogger(HomePageElements.class);
+	WebDriverWait wait;
+	Duration waitDuration = Duration.ofSeconds(120);
 
 	@FindBy(xpath = "//button[text()='Accept']")
 	WebElement approveAcceptBtn;
@@ -37,7 +44,7 @@ public class TaskPageElements {
 	@FindBy(xpath = "//span[text()='COMMENTS']/ancestor::div[7]/following-sibling::div//textarea")
 	WebElement commentField;
 
-	@FindBy(xpath = "//input[@placeholder='Search RDP TASK MGMT Task Details For Assignees']")
+	@FindBy(xpath = "//input[@placeholder='Search Tasks']")
 	WebElement searchTextField;
 
 	@FindBy(xpath = "//button[text()='Search']")
@@ -76,13 +83,16 @@ public class TaskPageElements {
 	public TaskPageElements(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
+		wait = new WebDriverWait(driver,waitDuration);
 	}
 
 	public void checkPageProgress(String strPageName, String strExpected) {
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()='Development Details']/following-sibling::span/span")));
 		WebElement ele = driver
 				.findElement(By.xpath("//span[text()='" + strPageName + "']/following-sibling::span/span"));
+		
 		String strCheck = ele.getText();
-		Assert.assertEquals(true, strCheck.equals(strExpected));
+		log.info(strPageName+":"+strCheck);
 	}
 
 	public void selectDepartment(String strDepartment) throws InterruptedException {
@@ -94,6 +104,9 @@ public class TaskPageElements {
 	}
 
 	public void clickNextBtn() throws InterruptedException {
+		WebElement element = driver.findElement(By.xpath("//button[text()='Next']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
 		Assert.assertEquals(true, nextBtn.isDisplayed());
 		nextBtn.click();
 		log.info("Clicked Next Button");
@@ -101,8 +114,8 @@ public class TaskPageElements {
 	}
 
 	public void clickAcceptBtn() throws InterruptedException {
-		if (driver.findElement(By.xpath("//button[text()='Accept']")).isDisplayed() == true) {
-			// Assert.assertEquals(true, approveAcceptBtn.isDisplayed());
+		String acceptStatus = System.getProperty("Accepted");
+		if (acceptStatus.contains("No")) {
 			approveAcceptBtn.click();
 			log.info("Clicked Accept Button");
 		} else {

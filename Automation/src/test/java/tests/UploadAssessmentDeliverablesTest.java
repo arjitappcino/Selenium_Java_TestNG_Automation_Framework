@@ -3,12 +3,13 @@ package tests;
 import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -25,7 +26,7 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class FinalTestConfirmation extends BaseClass {
+public class UploadAssessmentDeliverablesTest extends BaseClass {
 
 	BaseClass bs;
 	Properties properties;
@@ -39,8 +40,7 @@ public class FinalTestConfirmation extends BaseClass {
 	Actions action;
 	JavascriptExecutor je;
 	ExtentTest logger;
-	RDIFCreationTest rc = new RDIFCreationTest();
-	WebDriverWait wait;
+	RDIFCreationTest rc = new RDIFCreationTest();;
 
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
@@ -65,35 +65,63 @@ public class FinalTestConfirmation extends BaseClass {
 	}
 
 	@Test
-	public void confirmation() throws Exception {
+	public void taskUploadAssessmentDeliverablesATR() throws Exception {
 		extent = getExtent();
-		logger = extent.startTest("Confirmation");
+		String taskName = properties.getProperty("TASK_UPLOAD_ASSESSMENT_DELIVERABLES");
+		logger = extent.startTest(taskName);
 		
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
-		String devTitle = properties.getProperty("currentProject");
-		
+		String devTitle = projectName;
+
+		Thread.sleep(5000);
 		logger.log(LogStatus.PASS, "URL HIT");
+		System.out.println("Starting Task: "+taskName);
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
 
 		objLogin.login(userName, password);
 		Thread.sleep(2000);
 		logger.log(LogStatus.PASS, "Login Successful ATR");
-		Thread.sleep(7000);
 
-		driver.findElement(By.xpath("//strong[text()='PROJECTS']/ancestor::div[12]//a[text()='"+devTitle+"']")).click();
-		Thread.sleep(7000);
+		objHome.clickTaskBtn();
+		logger.log(LogStatus.PASS, "Clicked Task Button");
+		Thread.sleep(4000);
+
+		objTaskPage.setSearch(devTitle);
+		Thread.sleep(1000);
+		objTaskPage.clickSearch();
+		Thread.sleep(4000);
+
+		WebElement task = util.fetchTask(taskName, devTitle);
+		task.click();
 		util.takeSnapShot();
-		driver.findElement(By.xpath("//div[text()='Assessment Activities']")).click();
-		Thread.sleep(2000);
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+
+		Thread.sleep(4000);
+
+		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		
+		objTaskPage.clickAcceptBtn();
+		Thread.sleep(1000);
+
+		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
 		
-		driver.findElement(By.xpath("//a[@aria-label='Next page']/i")).click();
+		List<WebElement> uploadAssessments = driver.findElements(By.xpath("//input[@type='file']"));
+		uploadAssessments.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload1.pdf");
+		uploadAssessments.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload2.pdf");
 		Thread.sleep(2000);
-		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Assessment Flow completed Successfully");
+		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		objTaskPage.clickSubmitBtn();
+		logger.log(LogStatus.PASS, "Clicked submit button");
+		Thread.sleep(4000);
+	
+		objSuccessPage.validateAssessmentDeliverablesTaskCompleted(devTitle);
+		util.takeSnapShot();
+		logger.log(LogStatus.PASS, "Completed Upload Assessment Deliverables by ATR Successfully");
 
 	}
 	
