@@ -65,7 +65,7 @@ public class AcceptScreeningFormByATSMTest extends BaseClass{
 	}
 
 	@Test
-	public void taskReviewApproveScreeningFormATM() throws Exception {
+	public void taskAcceptScreeningFormATM() throws Exception {
 		extent = getExtent();
 		String taskName = properties.getProperty("TASK_ACCEPT_SCREEN_FORM_ATSM");
 		logger = extent.startTest(taskName);
@@ -93,40 +93,55 @@ public class AcceptScreeningFormByATSMTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle + logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+		
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
 		
-		WebElement element = driver.findElement(By.xpath("//strong[text()='SIMILAR ACTIVITIES']"));
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
+		
+		WebElement element = driver.findElement(By.xpath("//*[text()='SIMILAR ACTIVITIES']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
 		util.takeSnapShot();
 		
-		driver.findElement(By.xpath("//label[text()='Assessment Team Director']")).click();
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
+		String signee = signBy;
+		WebElement element1 = driver.findElement(By.xpath("//*[contains(text(),'Select Role For E-sign')]"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
+		Thread.sleep(3000);
+		
+		driver.findElement(By.xpath("//label[text()='" +signee+ "']")).click();
+		Thread.sleep(3000);
+		
+		Thread.sleep(1000);
+		driver.findElement(By.xpath("//div[contains(text(),'Select User')]")).click();
+		Thread.sleep(5000);
+
+		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div//*[contains(text(),'Antonio')]"))
+				.click();
 		Thread.sleep(2000);
-		driver.findElement(By.xpath("//span[text()='Select User']/parent::div/following-sibling::div//input")).sendKeys("Assessment_director");
-		Thread.sleep(1000);
-		robot.keyPress(KeyEvent.VK_ENTER);
-		Thread.sleep(1000);
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		System.out.println("Selected Signee");
 		
 		objTaskPage.setCommentTextArea("Accepted by ATSM");
 		util.takeSnapShot();
 		
-		objTaskPage.clickAcceptBtn();
+		objTaskPage.clickAcceptBottomBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		
-		objSuccessPage.validateReviewScreeningFormTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Review Screening Form by ATM Successfully");
+		objSuccessPage.validateAcceptScreeningFormTaskCompleted(devTitle);
+
 
 	}
 	
@@ -137,14 +152,14 @@ public class AcceptScreeningFormByATSMTest extends BaseClass{
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.FAIL, "Failed"+logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Review Screening Form by ATM Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

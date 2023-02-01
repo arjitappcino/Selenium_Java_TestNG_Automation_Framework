@@ -92,7 +92,6 @@
 			<version>2.41.2</version>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.jsoup</groupId>
 			<artifactId>jsoup</artifactId>
@@ -144,7 +143,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.22.2</version>
+					<version>3.0.0-M8</version>
 					<configuration>
 						<suiteXmlFiles>
 							<!--<suiteXmlFile>src\test\java\createRDIF.xml</suiteXmlFile>-->
@@ -155,6 +154,8 @@
 							<category>${env.CAT}</category>
 							<SignBy>${env.SIGN}</SignBy>
 							<Accepted>${env.ACCEPT}</Accepted>
+							<region>${env.REGION}</region>
+							<Environment>${env.Environment}</Environment>
 						</systemPropertyVariables>
 					</configuration>
 				</plugin>

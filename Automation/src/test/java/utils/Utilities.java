@@ -17,6 +17,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Properties;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -33,15 +34,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import ru.yandex.qatools.ashot.AShot;
 import ru.yandex.qatools.ashot.Screenshot;
 import ru.yandex.qatools.ashot.shooting.ShootingStrategies;
-import tests.BaseClass;
 
 public class Utilities{
 	WebDriver driver;
 	TakesScreenshot scrShot;
 	static TakesScreenshot finalScrShot;
+	Random rand;
 
 	public Utilities(WebDriver driver) {
 		this.driver = driver;
+		rand = new Random();
 	}
 	
 	public String takeSnapShot() throws Exception {
@@ -87,7 +89,7 @@ public class Utilities{
 
 	public ArrayList<String> keyDates() {
 
-		int gap = 2;
+		int gap = rand.nextInt(10);
 		ArrayList<String> arr = new ArrayList<String>();
 
 		for (int i = 0; i < 10; i++) {
@@ -95,21 +97,34 @@ public class Utilities{
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 			String date = dateObj.format(formatter);
 			arr.add(date);
-			gap = gap + 2;
+			
+			if(i%2==0) {
+				gap = gap + 25 + rand.nextInt(15);
+			}
+			else {
+				gap = gap + 1;
+			}
 		}
 
 		return arr;
 	}
 
-	public WebElement fetchTask(String taskName, String projectName) {
+	public WebElement fetchTask(String taskName, String projectName) throws InterruptedException {
+		Thread.sleep(20000);
 		WebElement taskFetch = null;
-		if(taskName.contains("Develop and submit Cat")) {
+		if(taskName.contains("Develop and Submit Cat")) {
 			taskFetch = driver.findElement(By.xpath(
-					"//a[text()='" + projectName + "']/ancestor::td/parent::tr/td[2]//a[contains(text(),'Develop and submit Cat')]"));
-		}else {
-			taskFetch = driver.findElement(By.xpath(
-					"//a[text()='" + projectName + "']/ancestor::td/parent::tr/td[2]//a[text()='" + taskName + "']"));
+					"//a[text()='" + projectName + "']/ancestor::td/parent::tr//a[contains(text(),'Develop and Submit Cat')]"));
 		}
+		else if(taskName.contains("NEV Review and Approve Cat")){
+			taskFetch = driver.findElement(By.xpath(
+					"//a[text()='" + projectName + "']/ancestor::td/parent::tr//a[contains(text(),'Review and Approve Cat')]"));
+		}
+		else {
+			taskFetch = driver.findElement(By.xpath(
+					"//a[text()='" + projectName + "']/ancestor::td/parent::tr//a[contains(text(),'" + taskName + "')]"));
+		}
+		System.out.println("Clicked on Task");
 		return taskFetch;
 
 	}

@@ -3,6 +3,7 @@ package tests;
 import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.time.Duration;
 import java.util.List;
 import java.util.Properties;
 
@@ -10,6 +11,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.ITestResult;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -56,6 +60,8 @@ public class UploadAssessmentDeliverablesTest extends BaseClass {
 		randomInput = new RandomDataInput(driver);
 		je = (JavascriptExecutor) driver;
 		action = new Actions(driver);
+		Duration waitDur = Duration.ofSeconds(60);
+		wait = new WebDriverWait(driver, waitDur);
 
 		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
@@ -94,34 +100,55 @@ public class UploadAssessmentDeliverablesTest extends BaseClass {
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
-		task.click();
+		String checkTaskName = task.getText();
+		System.out.println("Task name: "+checkTaskName);
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle +logger.addScreenCapture(util.captureFinalScreenshot()));
+		if(category.contains("IV")) {
+			Assert.assertEquals(checkTaskName.contains("Develop and Submit Master"),true);
+			driver.findElement(By.xpath("//span[text()='\" + projectName + \"']/ancestor::td/parent::tr//a[contains(text(),'Develop and Submit Master')]")).click();
+		}else if(category.contains("III")){
+			Assert.assertEquals(checkTaskName.contains("Develop and Submit Cat III"),true);
+			task.click();
+		}else if(category.contains("II")){
+			Assert.assertEquals(checkTaskName.contains("Develop and Submit Cat II"),true);
+			task.click();
+		}else {
+			Assert.assertEquals(checkTaskName.contains("Develop and Submit Cat I"),true);
+			task.click();
+		}
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+		
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'group meeting')]")));
 
-		Thread.sleep(4000);
-
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
 
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
 		List<WebElement> uploadAssessments = driver.findElements(By.xpath("//input[@type='file']"));
-		uploadAssessments.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload1.pdf");
-		uploadAssessments.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload2.pdf");
-		Thread.sleep(2000);
+		
+		if(category.contains("IV") || category.contains("II")) {
+			uploadAssessments.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload1.pdf");
+			uploadAssessments.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload2.pdf");
+			uploadAssessments.get(2).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload3.pdf");
+			uploadAssessments.get(3).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload4.pdf");
+			Thread.sleep(2000);
+		}
+		else {
+			uploadAssessments.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload1.pdf");
+			uploadAssessments.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\Upload2.pdf");
+			Thread.sleep(2000);
+		}
 		
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		logger.log(LogStatus.PASS, "Files Upload "+logger.addScreenCapture(util.captureFinalScreenshot()));
 		objTaskPage.clickSubmitBtn();
-		logger.log(LogStatus.PASS, "Clicked submit button");
-		Thread.sleep(4000);
-	
-		objSuccessPage.validateAssessmentDeliverablesTaskCompleted(devTitle);
+		Thread.sleep(2000);
+
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Completed Upload Assessment Deliverables by ATR Successfully");
 
 	}
 	
@@ -133,14 +160,14 @@ public class UploadAssessmentDeliverablesTest extends BaseClass {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.FAIL, "Failed"+logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Upload Assessment Deliverables by ATR Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

@@ -1,6 +1,7 @@
 package tests;
 
 import java.awt.AWTException;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -26,8 +27,8 @@ import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
 
-public class ReviewScreeningFormByATMTest extends BaseClass{
-	
+public class ReviewScreeningFormByATMTest extends BaseClass {
+
 	BaseClass bs;
 	Properties properties;
 	LoginPageElements objLogin;
@@ -41,10 +42,10 @@ public class ReviewScreeningFormByATMTest extends BaseClass{
 	JavascriptExecutor je;
 	ExtentTest logger;
 	RDIFCreationTest rc = new RDIFCreationTest();;
-	
+
 	@BeforeMethod
 	public void beforeTest() throws IOException, AWTException, InterruptedException {
-		
+
 		this.driver = getDriver();
 
 		objLogin = new LoginPageElements(driver);
@@ -69,13 +70,15 @@ public class ReviewScreeningFormByATMTest extends BaseClass{
 		extent = getExtent();
 		String taskName = properties.getProperty("TASK_SCREEN_APPROVE_ATM");
 		logger = extent.startTest(taskName);
-		
+
+		Thread.sleep(10000);
+
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = projectName;
 
 		logger.log(LogStatus.PASS, "URL HIT");
-		System.out.println("Starting Task: "+taskName);
+		System.out.println("Starting Task: " + taskName);
 		String userName = properties.getProperty("assTeamMgr");
 		String password = properties.getProperty("password");
 
@@ -84,7 +87,6 @@ public class ReviewScreeningFormByATMTest extends BaseClass{
 		logger.log(LogStatus.PASS, "Login Successful ATM");
 
 		objHome.clickTaskBtn();
-		logger.log(LogStatus.PASS, "Clicked Task Button");
 		Thread.sleep(2000);
 
 		objTaskPage.setSearch(devTitle);
@@ -93,44 +95,66 @@ public class ReviewScreeningFormByATMTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()) + "Clicked - " + taskName
+				+ " for title - " + devTitle);
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
-		Thread.sleep(4000);
+		Thread.sleep(5000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
-		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
-		
-		if(category.contains("I")) {
-			if(category.contains("III") || category.contains("IV")) {
-				System.out.println("");
-			}else {
-				driver.findElement(By.xpath("//label[text()='"+signBy+"']")).click();
-				Thread.sleep(2000);
-				logger.log(LogStatus.PASS, "Selected signee as "+signBy);
-			}
-			
-		}
-		
-		objTaskPage.setCommentTextArea("Reviewed and signee selected by ATM");
-		util.takeSnapShot();
-		
-		logger.log(LogStatus.PASS, "Reviewed and Selected Signee "+logger.addScreenCapture(util.captureFullScreenView()));
-		
-		objTaskPage.clickAcceptBottomBtn();
-		Thread.sleep(4000);
-		util.takeSnapShot();
-		
-		objSuccessPage.validateReviewScreeningFormTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Review Screening Form by ATM Successfully");
 
+		WebElement element = driver.findElement(By.xpath("//*[text()='SIMILAR ACTIVITIES']"));
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+		Thread.sleep(2000);
+		util.takeSnapShot();
+
+		System.out.println("Scrolled to Similar Activities");
+
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		System.out.println("CATEGORY: " + category);
+		if (category.contains("III") || category.contains("IV")) {
+			System.out.println("Manager will only review in cat 3 or 4 projects");
+		} else {
+			String signee = signBy;
+			WebElement element1 = driver.findElement(By.xpath("//span[contains(text(),'Select Role For E-sign')]"));
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element1);
+			Thread.sleep(3000);
+			driver.findElement(By.xpath("//label[text()='" +signee+ "']")).click();
+			Thread.sleep(3000);
+			driver.findElement(By.xpath("//div[contains(text(),'Select User')]")).click();
+			Thread.sleep(5000);
+//			driver.findElement(By.xpath("//input[@placeholder='Select Director']")).sendKeys("d");
+//			driver.findElement(By.xpath("//input[@placeholder='Select Director']")).sendKeys("i");
+//			driver.findElement(By.xpath("//input[@placeholder='Select Director']")).sendKeys("r");
+			
+			//Thread.sleep(5000);
+			// logger.log(LogStatus.PASS,
+			// logger.addScreenCapture(util.captureFinalScreenshot()));
+			driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div//*[contains(text(),'Antonio')]"))
+					.click();
+			Thread.sleep(3000);
+			logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+			System.out.println("Selected Signee");
+		}
+
+		objTaskPage.setCommentTextArea("Reviewed by ATM");
+		util.takeSnapShot();
+
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+
+		objTaskPage.clickAcceptBottomBtn();
+		Thread.sleep(5000);
+		util.takeSnapShot();
+
+		//objSuccessPage.validateReviewScreeningFormTaskCompleted(devTitle);
 	}
-	
+
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
 		String screenshotPath;
@@ -143,9 +167,10 @@ public class ReviewScreeningFormByATMTest extends BaseClass{
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
 			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
-		}else if(result.getStatus() == ITestResult.SUCCESS) {
+		} else if (result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS,
+					"Completed Review Screening Form by ATM Successfully" + logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

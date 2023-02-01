@@ -4,6 +4,8 @@ import java.awt.AWTException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
+
+import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -72,7 +74,7 @@ public class NcecSubmitScopingReportTest extends BaseClass {
 		System.out.println("Starting Task: "+taskName);
 		String devTitle = projectName;
 
-		Thread.sleep(5000);
+		Thread.sleep(10000);
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
@@ -91,30 +93,30 @@ public class NcecSubmitScopingReportTest extends BaseClass {
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
 
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
 		objTaskPage.setCommentTextArea("Random comment by ATR");
-		logger.log(LogStatus.PASS, "Comment set");
 		util.takeSnapShot();
 		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
 		objTaskPage.clickSubmitBtn();
-		logger.log(LogStatus.PASS, "Clicked submit button");
+		
 		Thread.sleep(4000);
 		
 		objSuccessPage.validateNCECUploadScopingReportTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Upload Scoping Report to NCEC by ATR Successfully");
 
 	}
 	
@@ -133,7 +135,7 @@ public class NcecSubmitScopingReportTest extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Upload Scoping Report to NCEC by ATR Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

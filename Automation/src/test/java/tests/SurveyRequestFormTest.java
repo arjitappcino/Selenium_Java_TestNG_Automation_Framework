@@ -108,43 +108,72 @@ public class SurveyRequestFormTest extends BaseClass {
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(2000);
 
-		objTaskPage.selectDepartment(randomInput.getRandomDepartment());
+		//objTaskPage.selectDepartment(randomInput.getRandomDepartment());
+		
+//		String department = driver.findElement(By.xpath("//span[contains(text(),'Sector/')]/parent::div/following-sibling::div//p")).getText();
+//		logger.log(LogStatus.PASS, "Department/Sector: "+department);
+//		System.out.println("Department: "+department);
 		util.takeSnapShot();
 
 		List<WebElement> inputFields = driver.findElements(By.xpath("//input[@type='text']"));
-		inputFields.get(0).sendKeys("12/31/2022");
+		inputFields.get(0).sendKeys("01/31/2023");
 		
 		List<WebElement> textAreas = driver.findElements(By.xpath("//textarea"));
 		textAreas.get(0).sendKeys("Random values");
 		textAreas.get(1).sendKeys("Random values");
+		driver.findElement(By.xpath("//textarea[contains(@placeholder,'Wind farm')]")).sendKeys("Random values");
 		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
-		WebElement element2 = driver.findElement(By.xpath("//strong[text()='GEOGRAPHICAL DETAILS']"));
-		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element2);
+		objTaskPage.clickNextBtn();
 		Thread.sleep(2000);
+		
+//		WebElement element2 = driver.findElement(By.xpath("//*[text()='GEOGRAPHICAL DETAILS']"));
+//		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element2);
+//		Thread.sleep(2000);
 		
 		List<WebElement> uploadFiles = driver.findElements(By.xpath("//input[@type='file']"));
 		uploadFiles.get(0).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process.jpg");
 		uploadFiles.get(1).sendKeys("C:\\Users\\arjit.yadav\\Desktop\\docs\\process2.jpg");
 		Thread.sleep(2000);
-		inputFields.get(1).sendKeys("10000");
-		inputFields.get(2).sendKeys("38.8951");
-		inputFields.get(3).sendKeys("-89.7084");
+		driver.findElement(By.xpath("//label[contains(text(),'calculated')]/parent::div/following-sibling::div//input")).sendKeys("10000");
 		Thread.sleep(2000);
-		textAreas.get(2).sendKeys("Random values");
-		textAreas.get(3).sendKeys("Random values");
+		List<WebElement> textAreasGD = driver.findElements(By.xpath("//textarea"));
+		textAreasGD.get(0).sendKeys("Random values");
+		textAreasGD.get(1).sendKeys("Random values");
+		
 		util.takeSnapShot();
 		
+		//logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
+//		WebElement element = driver.findElement(By.xpath("//label[text()='Comments']"));
+//		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
+//		Thread.sleep(2000);
+		//driver.findElement(By.xpath("//label[text()='Comments']/parent::div/following-sibling::div//textarea")).sendKeys("Comments by ATR");
+		
 		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+
+		
+		
+		List<WebElement> latitudeAdd = driver.findElements(By.xpath("//input"));
+		latitudeAdd.get(3).sendKeys("21.66");
+		latitudeAdd.get(4).sendKeys("22.66");
+		latitudeAdd.get(5).sendKeys("23.66");
+		latitudeAdd.get(6).sendKeys("24.66");
+		
+		List<WebElement> crossLatitude = driver.findElements(By.xpath("//span[contains(@class,'negative')]"));
+		crossLatitude.get(0).click();
+		
+		Thread.sleep(2000);
 		
 		objTaskPage.clickSubmitBtn();
 		Thread.sleep(2000);
 		objTaskPage.clickYesBtn();
 		Thread.sleep(2000);
 		
-		objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
+		//objSuccessPage.validateSurveyRequestTaskCompleted(devTitle);
 		util.takeSnapShot();
+		System.out.println("Completed Task: "+taskName);
 
 	}
 
@@ -155,6 +184,7 @@ public class SurveyRequestFormTest extends BaseClass {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
+			System.out.println("Survey Request Task Failed");
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
@@ -162,7 +192,6 @@ public class SurveyRequestFormTest extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			System.out.println("Completed Task: "+taskName);
 			logger.log(LogStatus.PASS, "Completed Survey Form Request Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();

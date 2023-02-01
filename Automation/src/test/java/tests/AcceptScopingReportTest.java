@@ -91,28 +91,29 @@ public class AcceptScopingReportTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
 		objTaskPage.setCommentTextArea("Comments by ATSM");
 		util.takeSnapShot();
+		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		
 		objSuccessPage.validateAcceptScopingReportTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Accept Scoping Report Task by ATSM Successfully");
 
 	}
 	
@@ -130,7 +131,7 @@ public class AcceptScopingReportTest extends BaseClass{
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Accept Scoping Report Task by ATSM Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

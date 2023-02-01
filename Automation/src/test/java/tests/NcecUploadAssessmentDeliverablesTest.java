@@ -72,7 +72,7 @@ public class NcecUploadAssessmentDeliverablesTest extends BaseClass {
 		System.out.println("Starting Task: "+taskName);
 		String devTitle = projectName;
 
-		Thread.sleep(5000);
+		Thread.sleep(10000);
 		logger.log(LogStatus.PASS, "URL HIT");
 		String userName = properties.getProperty("assRepUser");
 		String password = properties.getProperty("password");
@@ -91,26 +91,25 @@ public class NcecUploadAssessmentDeliverablesTest extends BaseClass {
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle +logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+		
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
 
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
 		objTaskPage.setCommentTextArea("Random comment by ATR");
-		logger.log(LogStatus.PASS, "Comment set");
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		logger.log(LogStatus.PASS, "Comment set "+logger.addScreenCapture(util.captureFinalScreenshot()));
 		objTaskPage.clickSubmitBtn();
-		logger.log(LogStatus.PASS, "Clicked submit button");
 		Thread.sleep(4000);
 		
 		objSuccessPage.validateNCECUploadAssessmentDeliverablesTaskCompleted(devTitle);
@@ -126,7 +125,7 @@ public class NcecUploadAssessmentDeliverablesTest extends BaseClass {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.FAIL, "Failed"+logger.addScreenCapture(screenshotPath));
 			System.out.println("Test FAILED: Upload Assessment Deliverables to NCEC");
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
@@ -134,7 +133,7 @@ public class NcecUploadAssessmentDeliverablesTest extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Upload Assessment Deliverables to NCEC by ATR Successfully"+logger.addScreenCapture(screenshotPath));
 			System.out.println("Test PASSED: Upload Assessment Deliverables to NCEC");
 		}
 		driver.quit();

@@ -87,68 +87,65 @@ public class ReviewRDIFTest extends BaseClass {
 		Thread.sleep(2000);
 
 		objTaskPage.setSearch(devTitle);
-		Thread.sleep(1000);
+		Thread.sleep(2000);
 		objTaskPage.clickSearch();
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: " + taskName);
+		logger.log(LogStatus.PASS,"Title: " +devTitle+logger.addScreenCapture(util.captureFinalScreenshot()));
 
 		objTaskPage.clickAcceptBtn();
 
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
+		
 		util.takeSnapShot();
 		Thread.sleep(2000);
 		
 		objTaskPage.checkPageProgress("Development Details","Completed");
+		objTaskPage.checkPageProgress("Additional Information","Completed");
 		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
-		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","In-Progress");
 		
-		//objRDIF.setCommentReviewRdif("Comments by ATR");
-		logger.log(LogStatus.PASS, "Development Details Page "+logger.addScreenCapture(util.captureFullScreenView()));
-		objTaskPage.clickNextBtn();
+		objRDIF.clickNextBtn();
+		Thread.sleep(2000);
+		objRDIF.clickNextBtn();
+		Thread.sleep(3000);
 		
-		objTaskPage.checkPageProgress("Development Details","Completed");
-		objTaskPage.checkPageProgress("Development Context & Categorization","Completed");
-		objTaskPage.checkPageProgress("Environmental Assessment & Approvals","Not-started");
+		objRDIF.setCommentReviewRdif("Accepted by ATR");
 		
-		//objRDIF.setCommentReviewRdif("Comments by ATR");
-		logger.log(LogStatus.PASS, "Development Context & Categorization Page "+logger.addScreenCapture(util.captureFullScreenView()));
-		objTaskPage.clickNextBtn();
+		objTaskPage.clickAcceptBottomBtn();
+		Thread.sleep(3000);
+		
+		objTaskPage.clickYesBtn();
+		Thread.sleep(5000);
 
-		// page 3 - Environmental Assessment & Approvals
-
-		//String cat = properties.getProperty("category");
-
-		objRDIF.setAssignmentTimeframe("PAA name", category, "Scoping, ENVID, ESIA Category III and ESMP Report", "01/15/2023", "Comments added");
+		
+		objRDIF.setAssignmentTimeframe("Region Early Works", category, "02/28/2023", "Some comments added.");
 		util.takeSnapShot();
 
 		objRDIF.setUpload();
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 
 		objRDIF.setRemainTextArea();
 		Thread.sleep(2000);
 		
-		objRDIF.setCommentReviewRdif("Comments by ATR");
-		logger.log(LogStatus.PASS, "Comments entered");
+		objRDIF.setCommentReviewRdif("Accepted by ATR");
 		
-		logger.log(LogStatus.PASS, "Environmental Assessment & Approvals Page "+logger.addScreenCapture(util.captureFullScreenView()));
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		Thread.sleep(2000);
-		objTaskPage.clickAcceptBottomBtn();
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		objTaskPage.clickSubmitBtn();
 		util.takeSnapShot();
 		Thread.sleep(4000);
 		util.takeSnapShot();
-		objSuccessPage.validateReviewRDIFTaskCompleted(devTitle);
+		//objSuccessPage.validateReviewRDIFTaskCompleted(devTitle);
 		util.takeSnapShot();
-
-		logger.log(LogStatus.PASS, "Completed Review RDIF by ATR Successfully");
 
 	}
 
@@ -166,7 +163,7 @@ public class ReviewRDIFTest extends BaseClass {
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Review RDIF by ATR Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

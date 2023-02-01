@@ -9,7 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Properties;
-import org.apache.commons.io.FileUtils;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.log4j.xml.DOMConfigurator;
@@ -39,17 +39,19 @@ public class BaseClass {
 	static public String category = System.getProperty("category");
 	static public String signBy = System.getProperty("SignBy");
 	static public String projectName = setProjectName(getProject);
+	static public String regionSelected = System.getProperty("region");
+	static public String environmentSelected = System.getProperty("Environment");
 
 	Utilities util = new Utilities(driver);
 	Properties properties;
 	String currentDirectory = System.getProperty("user.dir");
 	Robot robot;
-	Duration waitDuration = Duration.ofSeconds(300);
-	WebDriverWait wait;
+	Duration waitDuration = Duration.ofSeconds(60);
+	public WebDriverWait wait;
 
 	@BeforeSuite
 	public void beforeSuite() throws IOException {
-		// FileUtils.cleanDirectory(screenshotFolder);
+		//FileUtils.cleanDirectory(screenshotFolder);
 		FileInputStream in = new FileInputStream(util.getConfigPropertyLocation());
 		properties = new Properties();
 		properties.load(in);
@@ -73,7 +75,7 @@ public class BaseClass {
 	@BeforeTest
 	public void setUp() throws AWTException, InterruptedException {
 		startSeleniumSession();
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 
 	}
 
@@ -81,18 +83,23 @@ public class BaseClass {
 	public void startSeleniumSession() throws AWTException, InterruptedException {
 		System.setProperty("webdriver.chrome.driver", "./driver/chromedriver.exe");
 		ChromeOptions capability = new ChromeOptions();
-		capability.addArguments("--window-size=1600,600");
+		capability.addArguments("--window-size=1600,900");
 		// capability.addArguments("--start-maximized");
 		capability.addArguments("--headless");
 		capability.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);
 		capability.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
 		driver = new ChromeDriver(capability);
 
-		driver.manage().window().maximize();
-
+		//driver.manage().window().maximize();
 		robot = new Robot();
 		robot.keyPress(KeyEvent.VK_CONTROL);
 		robot.keyPress(KeyEvent.VK_SUBTRACT);
+		robot.keyRelease(KeyEvent.VK_CONTROL);
+		robot.keyRelease(KeyEvent.VK_SUBTRACT);
+		
+		
+//		robot.keyPress(KeyEvent.VK_CONTROL);
+//		robot.keyPress(KeyEvent.VK_SUBTRACT);
 		Thread.sleep(1000);
 
 		// System.out.println(currentDirectory);

@@ -1,6 +1,11 @@
 package pageFactory;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Properties;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
@@ -14,11 +19,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
+import utils.Utilities;
+
 public class TaskPageElements {
 	WebDriver driver;
 	org.slf4j.Logger log = LoggerFactory.getLogger(HomePageElements.class);
 	WebDriverWait wait;
-	Duration waitDuration = Duration.ofSeconds(120);
+	Duration waitDuration = Duration.ofSeconds(20);
+	Properties properties;
+	Utilities util;
 
 	@FindBy(xpath = "//button[text()='Accept']")
 	WebElement approveAcceptBtn;
@@ -52,22 +61,22 @@ public class TaskPageElements {
 
 	// Screening Form Elements
 
-	@FindBy(xpath = "//span[text()='Approval Type']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
+	@FindBy(xpath = "//*[text()='Approval Type']/parent::div/following-sibling::div//span[contains(text(),'Select a Value')]/parent::div")
 	WebElement approvalType;
 
-	@FindBy(xpath = "//span[text()='Phase']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
+	@FindBy(xpath = "//*[text()='Phase']/parent::div/following-sibling::div//span[contains(text(),'Select a Value')]/parent::div")
 	WebElement phaseType;
 
-	@FindBy(xpath = "//span[text()='Detailed Master Plan']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
+	@FindBy(xpath = "//*[text()='Detailed Master Plan']/parent::div/following-sibling::div//span[contains(text(),'Select a Value')]/parent::div")
 	WebElement detailedMasterPlanType;
 
-	@FindBy(xpath = "//span[text()='Concept Design']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
+	@FindBy(xpath = "//*[text()='Concept Design']/parent::div/following-sibling::div//span[contains(text(),'Select a Value')]/parent::div")
 	WebElement conceptDesignType;
 
-	@FindBy(xpath = "//span[text()='Execution Plan']/parent::div/following-sibling::div//span[contains(text(),'Select A Value')]/parent::div")
+	@FindBy(xpath = "//*[text()='Execution Plan']/parent::div/following-sibling::div//span[contains(text(),'Select a Value')]/parent::div")
 	WebElement executionPlanType;
 
-	@FindBy(xpath = "//label[text()='NCEC Approval Required Date']/parent::div/following-sibling::div//input")
+	@FindBy(xpath = "//label[contains(text(),'Start Date')]/parent::div/following-sibling::div//input")
 	WebElement ncecApprovalRequiredDate;
 
 	@FindBy(xpath = "//label[text()='Name']/parent::div/following-sibling::div//input")
@@ -80,10 +89,16 @@ public class TaskPageElements {
 	WebElement approveAcceptBottomBtn;
 	
 
-	public TaskPageElements(WebDriver driver) {
+	public TaskPageElements(WebDriver driver) throws IOException {
 		this.driver = driver;
 		PageFactory.initElements(driver, this);
 		wait = new WebDriverWait(driver,waitDuration);
+		util = new Utilities(driver);
+		FileInputStream in = new FileInputStream(util.getProjectPropertyLocation());
+		properties = new Properties();
+		properties.load(in);
+		in.close();
+		
 	}
 
 	public void checkPageProgress(String strPageName, String strExpected) {
@@ -115,11 +130,12 @@ public class TaskPageElements {
 
 	public void clickAcceptBtn() throws InterruptedException {
 		String acceptStatus = System.getProperty("Accepted");
-		if (acceptStatus.contains("No")) {
-			approveAcceptBtn.click();
-			log.info("Clicked Accept Button");
+		if (acceptStatus.contains("Yes")) {
+			log.info("Already clicked Task Accept Button");
 		} else {
-			log.info("Already clicked Accept Button");
+			approveAcceptBtn.click();
+			log.info("Clicked Task Accept Button");
+			
 		}
 		Thread.sleep(2000);
 	}
@@ -129,7 +145,7 @@ public class TaskPageElements {
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
 		approveAcceptBottomBtn.click();
-		log.info("Clicked Accept Button");
+		log.info("Clicked Accept Bottom Button");
 		Thread.sleep(2000);
 	}
 
@@ -156,24 +172,43 @@ public class TaskPageElements {
 		WebElement element = driver.findElement(By.xpath("//strong[text()='REPORTING DETAILS AND TIME FRAME']"));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", element);
 		Thread.sleep(2000);
-
+		
 		dataDate.sendKeys(strDate);
+		log.info("Date Set to: "+strDate);
 	}
 
 	public void clickYesBtn() {
 		yesBtn.click();
+		log.info("Clicked yes button");
 	}
 
 	public void setComment(String strComment) {
 		commentField.sendKeys(strComment);
+		log.info("Comment set");
 	}
 
 	public void setSearch(String strSearch) {
 		searchTextField.sendKeys(strSearch);
+		log.info("Set search to: "+strSearch);
 	}
 
-	public void clickSearch() {
+	public void clickSearch() throws InterruptedException {
+		
+		driver.findElement(By.xpath("//span[text()='Status']")).click();
+		Thread.sleep(2000);
+		String acceptStatus = System.getProperty("Accepted");
+		if(acceptStatus.contains("Yes")) {
+			driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='ACCEPTED']")).click();
+			Thread.sleep(2000);
+			driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='ASSIGNED']")).click();
+			Thread.sleep(2000);
+		}
+
+		
 		searchBtn.click();
+		Thread.sleep(3000);
+		log.info("Clicked search button");
+		
 	}
 
 	public void cancelBtn() {
@@ -197,8 +232,10 @@ public class TaskPageElements {
 	public void selectValue(String strApprovalType, String strPhase, String strDetailedMasterPlan,
 			String strConceptDesign, String strExecutionPlan) throws InterruptedException {
 		approvalType.click();
-		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strApprovalType + "']"))
-				.click();
+//		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[text()='" + strApprovalType + "']"))
+//				.click();
+		driver.findElement(By.xpath("//div[@data-tether-id='1']/following::div[contains(text(),'Track')]"))
+		.click();
 		log.info("Approval Type Selected= " + strApprovalType);
 		Thread.sleep(1000);
 
@@ -228,6 +265,7 @@ public class TaskPageElements {
 
 	public void setActivityName(String strName) {
 		activityName.sendKeys(strName);
+		log.info("Activity name set to: "+strName);
 	}
 
 	public void setCommentTextArea(String strComment) throws InterruptedException {
@@ -236,5 +274,6 @@ public class TaskPageElements {
 		Thread.sleep(2000);
 
 		commentTextArea.sendKeys(strComment);
+		log.info("Comment set");
 	}
 }

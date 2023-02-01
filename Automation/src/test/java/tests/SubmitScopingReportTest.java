@@ -75,6 +75,7 @@ public class SubmitScopingReportTest extends BaseClass{
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = projectName;
+		System.out.println("Starting Task: "+taskName);
 
 		logger.log(LogStatus.PASS, "URL HIT");
 		System.out.println("Starting Task: "+taskName);
@@ -95,32 +96,32 @@ public class SubmitScopingReportTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
-		Thread.sleep(4000);
+		Thread.sleep(5000);
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
-		
-		driver.findElement(By.xpath("//label[text()='Title']/parent::div/following-sibling::div//input")).sendKeys("Dummy Title");
 		String strPath = currentDirectory+"\\scoping_sample.pdf";
-		driver.findElement(By.xpath("//span[contains(text(),'Upload')]/parent::div/following-sibling::div//input")).sendKeys(strPath);
+		driver.findElement(By.xpath("//input[@type='file']")).sendKeys(strPath);
 		
 		Thread.sleep(2000);
 		util.takeSnapShot();
+		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickSubmitBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		
 		objSuccessPage.validateUploadScopingReportTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Upload Scoping Report Task by ATR Successfully");
+		System.out.println("Completed Upload Scoping Report");
 
 	}
 	
@@ -138,7 +139,7 @@ public class SubmitScopingReportTest extends BaseClass{
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Upload Scoping Report Task by ATR Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}

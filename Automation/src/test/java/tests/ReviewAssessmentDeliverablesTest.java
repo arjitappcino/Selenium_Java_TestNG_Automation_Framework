@@ -64,6 +64,7 @@ public class ReviewAssessmentDeliverablesTest extends BaseClass{
 
 	@Test
 	public void taskReviewAssessmentDeliverablesATM() throws Exception {
+		Thread.sleep(60000);
 		extent = getExtent();
 		String taskName = properties.getProperty("TASK_REVIEW_ASSESSMENT_DELIVERABLES_ATM");
 		logger = extent.startTest(taskName);
@@ -94,31 +95,30 @@ public class ReviewAssessmentDeliverablesTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
+		
 
 		Thread.sleep(4000);
-
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
 		
+		logger.log(LogStatus.PASS,"Task Page: "+taskName+ logger.addScreenCapture(util.captureFinalScreenshot()));
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
 		logger.log(LogStatus.PASS, "Clicked Accept Button");
 		util.takeSnapShot();
 		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.setCommentTextArea("Comments by ATM");
 		util.takeSnapShot();
 		
-		logger.log(LogStatus.PASS, "Fullscreen view "+logger.addScreenCapture(util.captureFullScreenView()));
+		logger.log(LogStatus.PASS, "Comment added"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		objTaskPage.clickAcceptBottomBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		
 		objSuccessPage.validateReviewAssessmentDeliverablesTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Review Assessment Deliverables by ATM Successfully");
-
 	}
 	
 	@AfterMethod
@@ -128,7 +128,7 @@ public class ReviewAssessmentDeliverablesTest extends BaseClass{
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.FAIL, "Failed"+logger.addScreenCapture(screenshotPath));
 			System.out.println("Test FAILED: Review Assessment Deliverables by ATM");
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
@@ -136,7 +136,7 @@ public class ReviewAssessmentDeliverablesTest extends BaseClass{
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS, "Completed Review Assessment Deliverables by ATM Successfully"+logger.addScreenCapture(screenshotPath));
 			System.out.println("Test PASSED: Review Assessment Deliverables by ATM");
 		}
 		driver.quit();

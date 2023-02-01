@@ -41,6 +41,8 @@ public class RandomDataInput {
 
 	String[] categoryTypes = { "Category I", "Category II", "Category III", "Category IV",
 			"Below Assessment Category" };
+	
+	String[] approvalType = { "Standard","Fast Track" };
 
 	public RandomDataInput(WebDriver driver) {
 		this.driver = driver;
@@ -48,12 +50,16 @@ public class RandomDataInput {
 	}
 
 	public String getRandomRegion() {
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[contains(text(),'RDIF')]")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'RDIF')]")));
 		return regionList[rand.nextInt(regionList.length)];
 	}
 
 	public String getRandomSector() {
 		return sectorList[rand.nextInt(sectorList.length)];
+	}
+	
+	public String getRandomApprovalType() {
+		return approvalType[rand.nextInt(approvalType.length)];
 	}
 
 	public String getRandomProjectType() {

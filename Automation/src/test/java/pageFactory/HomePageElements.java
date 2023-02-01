@@ -17,13 +17,16 @@ public class HomePageElements {
 	WebDriver driver;
 	Logger log = Logger.getLogger(HomePageElements.class);
 	WebDriverWait wait;
-	Duration waitDuration = Duration.ofSeconds(120);
+	Duration waitDuration = Duration.ofSeconds(30);
 	
-	@FindBy(xpath="//strong[text()='PROJECT']")
+	@FindBy(xpath="//button[contains(text(),'Start New RDIF')]")
 	WebElement createProjectBtn;
 	
 	@FindBy(xpath="//div[text()='TASKS']")
 	WebElement taskBtn;
+	
+	@FindBy(xpath="//div[text()='PROJECTS']")
+	WebElement projectsBtn;
 
 	public HomePageElements(WebDriver driver){
 		this.driver = driver;
@@ -31,15 +34,25 @@ public class HomePageElements {
 		wait = new WebDriverWait(driver,waitDuration);
 	}
 	
-	public void clickCreateProjectBtn(){
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[text()='PROJECT']")));
+	public void clickCreateProjectBtn() throws InterruptedException{
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[text()='Start New RDIF']")));
 		Assert.assertEquals(true, createProjectBtn.isDisplayed());
 		createProjectBtn.click();
 		log.info("Create Project Button Clicked");
+		Thread.sleep(3000);
 	}
 	
-	public void clickTaskBtn() {
+	public void clickTaskBtn() throws InterruptedException {
 		taskBtn.click();
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//strong[text()='TASKS']")));
+		Thread.sleep(5000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Search')]")));
 	}
+	
+	public void clickProjectsBtn() throws InterruptedException {
+		projectsBtn.click();
+		Thread.sleep(3000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[text()='EXPORT PROJECT TRACKER']")));
+	}
+	
+	
 }

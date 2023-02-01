@@ -16,6 +16,7 @@ import org.testng.annotations.Test;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import io.opentelemetry.exporter.logging.SystemOutLogRecordExporter;
 import pageFactory.CreateRDIFPageElements;
 import pageFactory.HomePageElements;
 import pageFactory.LoginPageElements;
@@ -64,6 +65,7 @@ public class ReviewScopingReportTest extends BaseClass{
 
 	@Test
 	public void taskReviewScopingReportATM() throws Exception {
+		Thread.sleep(10000);
 		extent = getExtent();
 		String taskName = properties.getProperty("TASK_REVIEW_SCOPING_REPORT_ATM");
 		logger = extent.startTest(taskName);
@@ -71,6 +73,7 @@ public class ReviewScopingReportTest extends BaseClass{
 		// String devTitle = "NEOM ATMN ID 2239";
 		driver.get(properties.getProperty("url_proponent"));
 		String devTitle = projectName;
+		System.out.println("Starting Task: "+taskName);
 
 		logger.log(LogStatus.PASS, "URL HIT");
 		System.out.println("Starting Task: "+taskName);
@@ -91,29 +94,31 @@ public class ReviewScopingReportTest extends BaseClass{
 		Thread.sleep(4000);
 
 		WebElement task = util.fetchTask(taskName, devTitle);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		task.click();
 		util.takeSnapShot();
-		logger.log(LogStatus.PASS, "Clicked - " + taskName + " for title - " + devTitle);
 
 		Thread.sleep(4000);
 
-		logger.log(LogStatus.PASS, "Task Page: "+taskName);
+		logger.log(LogStatus.PASS, "Task Page: "+taskName+logger.addScreenCapture(util.captureFinalScreenshot()));
 		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(1000);
-		logger.log(LogStatus.PASS, "Clicked Accept Button");
+		logger.log(LogStatus.PASS, "Clicked Accept Button"+logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
 		
 		
 		objTaskPage.setCommentTextArea("Comments by ATM");
 		util.takeSnapShot();
 		
+		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
+		
 		objTaskPage.clickAcceptBtn();
 		Thread.sleep(4000);
 		util.takeSnapShot();
 		
 		objSuccessPage.validateReviewScopingReportTaskCompleted(devTitle);
-		logger.log(LogStatus.PASS, "Completed Review Scoping Report Task by ATM Successfully");
+		System.out.println("Completed review scoping report task");
 
 	}
 	
@@ -131,7 +136,7 @@ public class ReviewScopingReportTest extends BaseClass{
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		}else if(result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
-			logger.log(LogStatus.PASS, logger.addScreenCapture(screenshotPath));
+			logger.log(LogStatus.PASS,  "Completed Review Scoping Report Task by ATM Successfully"+logger.addScreenCapture(screenshotPath));
 		}
 		driver.quit();
 	}
