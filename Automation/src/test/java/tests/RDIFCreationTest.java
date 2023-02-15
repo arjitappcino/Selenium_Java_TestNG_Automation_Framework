@@ -24,7 +24,6 @@ import com.relevantcodes.extentreports.LogStatus;
 import pageFactory.CreateRDIFPageElements;
 import pageFactory.HomePageElements;
 import pageFactory.LoginPageElements;
-import pageFactory.SuccessPageElements;
 import pageFactory.TaskPageElements;
 import random.RandomDataInput;
 import utils.Utilities;
@@ -34,7 +33,6 @@ public class RDIFCreationTest extends BaseClass {
 	LoginPageElements objLogin;
 	HomePageElements objHome;
 	CreateRDIFPageElements objRDIF;
-	SuccessPageElements objSuccessPage;
 	TaskPageElements objTaskPage;
 	WebDriverWait wait;
 	JavascriptExecutor je;
@@ -74,7 +72,6 @@ public class RDIFCreationTest extends BaseClass {
 		objRDIF = new CreateRDIFPageElements(driver);
 		objTaskPage = new TaskPageElements(driver);
 		util = new Utilities(driver);
-		objSuccessPage = new SuccessPageElements(driver);
 		randomInput = new RandomDataInput(driver);
 		je = (JavascriptExecutor) driver;
 		action = new Actions(driver);
@@ -101,9 +98,6 @@ public class RDIFCreationTest extends BaseClass {
 
 		objLogin.login(userName, password);
 		logger.log(LogStatus.PASS, "Login Successful with Username: " + userName + ", Password: " + password);
-
-//		objHome.clickProjectsBtn();
-//		Thread.sleep(2000);
 
 		objHome.clickCreateProjectBtn();
 
@@ -175,8 +169,7 @@ public class RDIFCreationTest extends BaseClass {
 		// page 2 - Development Context & Categorization
 
 		objRDIF.setStrategicAndPlanningContext();
-		// String projectTypeRandom = randomInput.getRandomProjectType();
-		// objRDIF.setProjectType(projectTypeRandom);
+
 		objRDIF.setProjectType("Project");
 		logger.log(LogStatus.PASS, logger.addScreenCapture(util.captureFinalScreenshot()));
 		util.takeSnapShot();
@@ -203,16 +196,13 @@ public class RDIFCreationTest extends BaseClass {
 
 	@AfterMethod
 	public void getResult(ITestResult result) throws Exception {
-		String screenshotPath;
+		String screenshotPath = util.captureFinalScreenshot();;
 		if (result.getStatus() == ITestResult.FAILURE) {
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getName());
 			logger.log(LogStatus.FAIL, "Test Case Failed is " + result.getThrowable());
-			screenshotPath = util.captureFinalScreenshot();
-			System.out.println("RDIF NOT CREATED\n\n\n");
 			logger.log(LogStatus.FAIL, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SKIP) {
 			logger.log(LogStatus.SKIP, "Test Case Skipped is " + result.getName());
-			screenshotPath = util.captureFinalScreenshot();
 			logger.log(LogStatus.SKIP, logger.addScreenCapture(screenshotPath));
 		} else if (result.getStatus() == ITestResult.SUCCESS) {
 			screenshotPath = util.captureFinalScreenshot();
